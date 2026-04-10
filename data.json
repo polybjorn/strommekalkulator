@@ -1,0 +1,309 @@
+[
+  {
+    "category": "",
+    "items": [
+      {
+        "id": "apple", "name": "Apple TV+", "color": "#555", "initials": "A+", "lastChecked": "2026-04-19",
+        "url": "https://tv.apple.com/no", "favicon": "https://tv.apple.com/apple-touch-icon.png",
+        "tiers": [{ "label": "Standard", "price": 119 }]
+      },
+      {
+        "id": "britbox", "name": "BritBox", "color": "#c4281c", "initials": "BB", "lastChecked": "2026-04-19",
+        "url": "https://www.britbox.com/no/", "favicon": "https://www.britbox.com/Content/img/favicon/apple-touch-icon-v2.png",
+        "tiers": [{ "label": "Standard", "price": 89, "yearlyPrice": 699 }]
+      },
+      {
+        "id": "crunchyroll", "name": "Crunchyroll", "color": "#f47521", "initials": "CR", "lastChecked": "2026-04-19",
+        "url": "https://www.crunchyroll.com/", "favicon": "https://www.crunchyroll.com/favicons/favicon-32x32.png",
+        "note": "<div style=\"font-weight:600;color:var(--text);margin-bottom:0.3rem\">Inkludert i alle pakker:</div><ul><li>Nedlasting</li></ul>",
+        "tiers": [
+          { "label": "Fan", "price": 79, "yearlyPrice": 790, "info": "<ul><li>1 skjerm</li></ul>" },
+          { "label": "Mega Fan", "price": 99, "yearlyPrice": 990, "info": "<ul><li>4 skjermer</li><li>Game Vault</li></ul>" }
+        ]
+      },
+      {
+        "id": "curiosity", "name": "CuriosityStream", "color": "#1a82c4", "initials": "CS", "lastChecked": "2026-04-19",
+        "url": "https://curiositystream.com/", "favicon": "https://curiositystream.com/apple-touch-icon.png",
+        "tiers": [
+          { "label": "Standard", "price": 60, "yearlyPrice": 499, "info": "<ul><li>Dokumentarer</li></ul>" },
+          { "label": "Smart Bundle", "price": 119, "yearlyPrice": 799, "info": "<ul><li>Dokumentarer</li><li>Tastemade</li><li>Kidstream</li><li>Curiosity University</li><li>SOMM TV</li></ul>" }
+        ]
+      },
+      {
+        "id": "disney", "name": "Disney+", "color": "#113ccf", "initials": "D+", "lastChecked": "2026-04-19",
+        "url": "https://www.disneyplus.com/nb-no", "favicon": "https://www.disneyplus.com/favicon.ico",
+        "tiers": [
+          { "label": "Med reklame", "price": 69, "info": "<ul><li>2 skjermer</li><li>1080p</li><li class=\"negative\">Ingen nedlasting</li></ul>" },
+          { "label": "Standard", "price": 109, "yearlyPrice": 1090, "info": "<ul><li>2 skjermer</li><li>1080p</li><li>Nedlasting</li></ul>" },
+          { "label": "Premium (4K)", "price": 159, "yearlyPrice": 1590, "info": "<ul><li>4 skjermer</li><li>4K UHD, HDR</li><li>Dolby Atmos</li><li>Nedlasting</li></ul>" }
+        ]
+      },
+      {
+        "id": "f1tv", "name": "Formel 1", "color": "#e10600", "initials": "F1", "lastChecked": "2026-04-19",
+        "url": "https://f1tv.formula1.com/",
+        "favicon": "https://t1.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=http://f1tv.formula1.com&size=128",
+        "currency": "EUR",
+        "note": "<p style=\"margin:0\">F1 TV fakturerer i euro. Totalsum konverteres til kroner med valutakursen vist i bunnlinja.</p>",
+        "tiers": [
+          { "label": "Access", "price": 3.50, "yearlyPrice": 30, "info": "<ul><li>Live timing, telemetri, dekkbruk og driver maps</li><li>Opptak av løp (tidsforsinket)</li><li>Team radio-sammendrag</li><li>Eksklusive show, dokumentarer og arkiv</li><li class=\"negative\">Ingen live video av F1-økter</li></ul>" },
+          { "label": "Pro", "price": 18, "yearlyPrice": 140, "sports": ["formel-1"], "hideSportSummary": true, "info": "<ul><li>Live alle F1-økter, reklamefritt</li><li>Onboard-kameraer og team radio</li><li>F2, F3, F1 Academy og Porsche Supercup</li><li>Eksklusive show fra race-helgene</li><li>Live timing og telemetri</li></ul>" },
+          { "label": "Premium", "price": 24, "yearlyPrice": 180, "sports": ["formel-1"], "hideSportSummary": true, "info": "<ul><li>Alt i Pro</li><li>4K UHD og HDR</li><li>Multiview</li><li>Inntil 6 samtidige enheter</li></ul>" }
+        ]
+      },
+      {
+        "id": "filmarkivet", "name": "Filmarkivet", "color": "#1a1a1a", "initials": "FA", "lastChecked": "2026-04-19",
+        "url": "https://www.filmarkivet.no/",
+        "tiers": [{ "label": "Standard", "price": 39 }]
+      },
+      {
+        "id": "max", "name": "HBO Max", "color": "#002be7", "initials": "HBO", "lastChecked": "2026-04-19",
+        "url": "https://www.max.com/nb/no", "favicon": "https://t1.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=http://max.com&size=128",
+        "tiers": [
+          { "label": "Basis med reklame (1080p)", "price": 89, "info": "<ul><li>2 skjermer</li><li>30 nedlastinger</li></ul>" },
+          { "label": "Standard (1080p)", "price": 149, "info": "<ul><li>2 skjermer</li><li>30 nedlastinger</li></ul>" },
+          { "label": "Standard + Sport", "price": 199, "sports": ["sykling", "tennis", "basket", "golf", "ol"], "sources": ["https://www.hbomax.com/no/en/olympics"], "info": "<ul><li>2 skjermer</li><li>Eurosport-kanaler</li></ul>" },
+          { "label": "Premium (4K Dolby)", "price": 189, "info": "<ul><li>4 skjermer</li><li>100 nedlastinger</li><li>Dolby Vision og Atmos</li></ul>" },
+          { "label": "Premium + Sport", "price": 239, "sports": ["sykling", "tennis", "basket", "golf", "ol"], "sources": ["https://www.hbomax.com/no/en/olympics"], "info": "<ul><li>4 skjermer, 4K Dolby</li><li>Eurosport-kanaler</li></ul>" }
+        ]
+      },
+      {
+        "id": "mubi", "name": "MUBI", "color": "#001d34", "initials": "M", "lastChecked": "2026-04-19",
+        "url": "https://mubi.com/nb", "favicon": "https://mubi.com/apple-touch-icon.png",
+        "tiers": [{ "label": "Standard", "price": 129, "yearlyPrice": 1068 }]
+      },
+      {
+        "id": "mygame", "name": "MyGame", "color": "#4caf50", "initials": "MG", "lastChecked": "2026-04-19",
+        "url": "https://mygame.no/",
+        "favicon": "https://wpcdn.mygame.no/wp-content/uploads/2025/02/cropped-favicon-mygame-transparent-180x180.png",
+        "note": "<p style=\"margin:0\">Streames via TV 2 Play-app (krever ikke eget TV 2 Play-abonnement). Kjøpes på <a href=\"https://play.tv2.no/pakker?swimLane=mygame\" target=\"_blank\" rel=\"noopener\" style=\"color:var(--accent)\">play.tv2.no ↗</a></p>",
+        "tiers": [{
+          "label": "Standard", "price": 139,
+          "sports": ["innebandy", "basket", "volleyball", "ishockey", "haandball"],
+          "hideSportSummary": true,
+          "info": "<dl class=\"sport-details\"><dt>Innebandy</dt><dd>Eliteserien, 1. divisjon, NM, senior bredde, ungdomsturneringer</dd><dt>Basket</dt><dd>BLNO, Nasjonal 1M, senior bredde, ungdomsturneringer</dd><dt>Volleyball</dt><dd>Mizunoligaen, 1. divisjon, NorgesTour, senior bredde, ungdomsturneringer</dd><dt>Ishockey</dt><dd>2. divisjon herrer og nedover, 1. divisjon kvinner og nedover, U20, U18, utvalgte landskamper</dd><dt>Fotball</dt><dd>5. divisjon herrer og nedover, 2. divisjon kvinner og nedover, OBOS Nasjonale Serier, ungdomsturneringer</dd><dt>Håndball</dt><dd>2. divisjon og nedover, ungdomsturneringer, utvalgte NM- og landskamper</dd></dl>"
+        }]
+      },
+      {
+        "id": "netflix", "name": "Netflix", "color": "#e50914", "initials": "N", "lastChecked": "2026-04-19",
+        "url": "https://www.netflix.com/nb/", "favicon": "https://assets.nflxext.com/us/ffe/siteui/common/icons/nficon2023.ico",
+        "tiers": [
+          { "label": "Basis (720p)", "price": 99, "info": "<ul><li>1 skjerm</li><li>1 nedlastingsenhet</li></ul>" },
+          { "label": "Standard (1080p)", "price": 129, "info": "<ul><li>2 skjermer</li><li>2 nedlastingsenheter</li></ul>" },
+          { "label": "Premium (4K HDR)", "price": 189, "info": "<ul><li>4 skjermer</li><li>6 nedlastingsenheter</li><li>4K, HDR, Dolby Atmos</li></ul>" }
+        ]
+      },
+      {
+        "id": "nordiskfilm", "name": "Nordisk Film+", "color": "#004a9f", "initials": "NF+", "lastChecked": "2026-04-19",
+        "url": "https://nordiskfilmplus.com/",
+        "favicon": "https://nordiskfilmplus.com/apple-touch-icon.png",
+        "infoOnly": true,
+        "note": "<p style=\"margin:0\">Ikke tilgjengelig som direkte abonnement i Norge. Fås kun via Strim (Maks-pakken), Altibox-poeng, RiksTV, Telia eller Telenor.</p>",
+        "tiers": [{ "label": "Kun via pakke", "price": 0 }]
+      },
+      {
+        "id": "nrk", "name": "NRK", "color": "#000000", "initials": "NRK", "lastChecked": "2026-04-19",
+        "url": "https://tv.nrk.no/",
+        "favicon": "https://static.nrk.no/publisering/kurator-visning/assets/apple-touch-icon.png",
+        "tiers": [{
+          "label": "Gratis", "price": 0,
+          "sports": ["eliteserien", "obos-ligaen", "toppserien", "fotball-vm", "langrenn", "skiskyting", "alpint", "hopp", "ol"],
+          "hideSportSummary": true,
+          "info": "<dl class=\"sport-details\"><dt>Vinter-OL</dt><dd>Alle øvelser fra OL 2026</dd><dt>Fotball</dt><dd>Fotball-VM 2026 (delt med TV 2), Eliteserien, OBOS-ligaen og Toppserien (delt med TV 2)</dd><dt>Langrenn</dt><dd>Alle norske renn og Ski Classics</dd><dt>Skiskyting</dt><dd>Verdenscup (delt med TV 2)</dd><dt>Andre sporter</dt><dd>Hopp (inkl. skiflygning), alpint, friidrett, utvalgte håndball-landskamper</dd></dl>"
+        }]
+      },
+      {
+        "id": "prime", "name": "Prime Video", "color": "#00a8e1", "initials": "PV", "lastChecked": "2026-04-19",
+        "url": "https://www.primevideo.com/", "favicon": "https://www.primevideo.com/apple-touch-icon.png",
+        "tiers": [{
+          "label": "Standard", "price": 79,
+          "sports": ["premier-league"],
+          "hideSportSummary": true,
+          "sources": ["https://help.viaplay.com/nb/premier-league-sparkes-i-gang/"],
+          "info": "<ul><li>Film og serier</li><li>Premier League*</li><li class=\"notice\">* 38 kamper per sesong (25/26) vises på Prime Video i stedet for Viaplay — typisk lørdager kl. 13.30. For full PL-dekning trengs både Prime Video og Viaplay Total.</li></ul>"
+        }]
+      },
+      {
+        "id": "skyshowtime", "name": "SkyShowtime", "color": "#6b2fa0", "initials": "SS", "lastChecked": "2026-04-19",
+        "url": "https://www.skyshowtime.com/no", "favicon": "https://t1.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=http://skyshowtime.com&size=128",
+        "tiers": [
+          { "label": "Standard med reklame", "price": 69, "yearlyPrice": 549, "info": "<ul><li>1080p</li><li>1 skjerm</li><li class=\"negative\">Ingen nedlasting</li></ul>" },
+          { "label": "Standard", "price": 109, "yearlyPrice": 869, "info": "<ul><li>1080p</li><li>2 skjermer</li><li>30 nedlastinger/mnd</li></ul>" },
+          { "label": "Premium", "price": 159, "yearlyPrice": 1250, "info": "<ul><li>4K Ultra HD</li><li>5 skjermer</li><li>100 nedlastinger/mnd</li><li>Dolby Atmos</li></ul>" }
+        ]
+      },
+      {
+        "id": "tv2", "name": "TV 2 Play", "color": "#d42127", "initials": "TV2", "lastChecked": "2026-04-19",
+        "url": "https://play.tv2.no/", "favicon": "https://play.tv2.no/favicon/apple-touch-icon.png?v=2",
+        "tiers": [
+          { "label": "Basis", "price": 169, "adPrice": 109, "info": "<ul><li>Film og serier</li><li>Norsk underholdning</li><li>Nyhetskanalen</li></ul>" },
+          { "label": "Favoritt", "price": 259, "adPrice": 189, "includes": ["disney"], "sports": ["haandball", "ishockey", "tennis", "sykling", "sjakk", "langrenn", "skiskyting", "alpint", "hopp", "basket", "volleyball", "innebandy", "nations-league", "fotball-vm"], "hideSportSummary": true, "info": "<ul><li>Alt i Basis</li><li>Disney+</li><li>Live-TV og direkte kanaler</li></ul><dl class=\"sport-details\"><dt>Fotball</dt><dd>Fotball-VM 2026 (delt med NRK), UEFA Nations League, privatlandskamper</dd><dt>Andre sporter</dt><dd>Håndball, norsk ishockey, tennis, sykling, sjakk, langrenn, skiskyting, alpint, hopp, basket, volleyball, innebandy</dd></dl>" },
+          { "label": "Total", "price": 469, "adPrice": 399, "includes": ["disney"], "sports": ["eliteserien", "obos-ligaen", "toppserien", "nm-cup", "champions-league", "la-liga", "nations-league", "fotball-vm", "haandball", "sykling", "ishockey", "langrenn", "skiskyting", "alpint", "hopp", "tennis", "sjakk", "innebandy", "basket", "volleyball"], "hideSportSummary": true, "info": "<ul><li>Alt i Favoritt</li></ul><dl class=\"sport-details\"><dt>Fotball</dt><dd>Eliteserien, OBOS-ligaen og Toppserien (delt med NRK), Fotball-NM (Cupen), Champions League, LaLiga, lavere divisjoner (2. div., 4. div., Norsk Tipping-ligaen)</dd></dl>" }
+        ],
+        "addons": [
+          { "id": "tv2-adfree", "label": "Uten reklame", "price": 0, "minTier": 0, "info": "Fjerner reklame på TV 2 Play og oppgraderer Disney+ til uten reklame. Kombinert med «Se flere samtidig» oppgraderes Disney+ til Premium.", "isAdFreeToggle": true, "includesUpgrade": {"disney": 1} },
+          { "id": "tv2-fotball", "label": "Mer fotball", "price": 99, "minTier": 1, "maxTier": 1, "sports": ["fa-cup", "bundesliga", "ligue-1", "efl-championship", "carabao-cup", "europa-league", "conference-league"] },
+          { "id": "tv2-skjermer", "label": "Se flere samtidig", "price": 39, "minTier": 1, "maxTier": 1, "info": "Opptil 4 skjermer. Kombinert med «Uten reklame»: oppgraderer Disney+ til Premium.", "includesUpgrade": {"disney": 2}, "includesRequires": "tv2-adfree" }
+        ]
+      },
+      {
+        "id": "vgpluss", "name": "VG+", "color": "#1e1e1e", "initials": "VG", "lastChecked": "2026-04-19",
+        "url": "https://www.vg.no/vgpluss", "favicon": "https://www.vg.no/gfx/icons/apple-touch-icon-114-precomposed.png",
+        "tiers": [
+          { "label": "VG+", "price": 99, "info": "<ul><li>Alle VGs artikler</li><li>Serier og dokumentarer fra VGTV</li><li>Del gratis med en i familien</li></ul>" },
+          { "label": "VG+ Sport", "price": 159, "info": "<ul><li>Alt i VG+</li><li>Direktesendt sport på VGTV</li></ul>" },
+          { "label": "VG+ med Dine Penger", "price": 119, "info": "<ul><li>Alt i VG+</li><li>Alt fra Dine Penger</li></ul>" },
+          { "label": "VG+ med Podme", "price": 119, "info": "<ul><li>Alt i VG+</li><li>Podkaster fra Podme</li></ul>" },
+          { "label": "VG+ Total", "price": 179, "info": "<ul><li>Alt i VG+</li><li>Direktesendt sport</li><li>Podkaster fra Podme</li><li>Dine Penger og E24</li><li>Aftenposten, Bergens Tidende, Stavanger Aftenblad, Magasin+</li></ul>" }
+        ]
+      },
+      {
+        "id": "viaplay", "name": "Viaplay", "color": "#be0060", "initials": "VP", "lastChecked": "2026-04-19",
+        "url": "https://viaplay.no/", "favicon": "https://viaplay.no/apple-touch-icon.png",
+        "note": "<p style=\"margin:0\">Viaplay nevner enkelte pakker i Q&amp;A og artikler som ikke finnes på prislista (f.eks. «Medium Pluss»). Kun pakkene på prislista er listet her.</p>",
+        "tiers": [
+          { "label": "Film & Serier med reklame", "price": 109, "info": "<ul><li>Film, serier og barneinnhold</li></ul>" },
+          { "label": "Film & Serier", "price": 169, "info": "<ul><li>Film, serier og barneinnhold</li><li>Uten reklame</li></ul>" },
+          { "label": "Medium", "price": 399, "sports": ["formel-1", "indycar", "golf", "langrenn", "skiskyting", "alpint", "hopp", "europa-league", "conference-league", "ufc", "bundesliga", "ishockey"], "hideSportSummary": true, "sources": ["https://help.viaplay.com/nb/nhl-on-viaplay/", "https://help.viaplay.com/nb/hvem-kan-se-golfen/"], "info": "<ul><li>Film, serier og barneinnhold</li><li>Golf-majors, Formel 1, IndyCar, UFC</li><li>Viaplay Vinter (langrenn, skiskyting, alpint, hopp m.m.)</li><li>UEFA Europa League, UEFA Conference League, Bundesliga</li><li>NHL*</li><li class=\"notice\">* NHL er bekreftet av Viaplays hjelpeside, men ikke listet på selve produktsiden</li></ul>" },
+          { "label": "Total", "price": 799, "sports": ["formel-1", "indycar", "golf", "langrenn", "skiskyting", "alpint", "hopp", "europa-league", "conference-league", "ufc", "bundesliga", "premier-league", "ishockey"], "hideSportSummary": true, "sources": ["https://help.viaplay.com/nb/nhl-on-viaplay/", "https://help.viaplay.com/nb/hvem-kan-se-golfen/", "https://help.viaplay.com/nb/premier-league-sparkes-i-gang/"], "info": "<ul><li>Alt i Medium</li><li>Premier League (nesten alle kamper*)</li><li>Ryder Cup (golf)</li><li>Viascore (høydepunkter og resultater)</li><li class=\"notice\">* 38 kamper per sesong (25/26) vises på Prime Video, ikke Viaplay</li></ul>" },
+          { "label": "Total Pluss", "price": 849, "yearlyPrice": 8388, "sports": ["formel-1", "indycar", "golf", "langrenn", "skiskyting", "alpint", "hopp", "europa-league", "conference-league", "ufc", "bundesliga", "premier-league", "ishockey", "la-liga", "fa-cup", "nations-league", "toppserien"], "hideSportSummary": true, "info": "<ul><li>Alt i Total</li><li>Mer fotball fra TV 2 (LaLiga, FA Cup, UEFA-landslagsfotball for herrer*, Toppserien)</li><li class=\"notice\">* Norges herrelandskamper er ikke inkludert</li><li class=\"notice\">12 mnd binding: 699 kr/mnd (fornyes til 849 kr/mnd)</li></ul>" }
+        ],
+        "addons": [
+          { "id": "viaplay-tv2fotball", "label": "Mer fotball fra TV 2", "price": 50, "minTier": 3, "maxTier": 3, "sports": ["la-liga", "fa-cup", "toppserien", "nations-league"] }
+        ]
+      },
+      {
+        "id": "youtube", "name": "YouTube Premium", "color": "#ff0000", "initials": "YT", "lastChecked": "2026-04-19",
+        "url": "https://www.youtube.com/premium", "favicon": "https://www.youtube.com/s/desktop/dfbe401e/img/favicon_144x144.png",
+        "tiers": [{ "label": "Premium", "price": 169 }]
+      }
+    ]
+  },
+  {
+    "category": "Pakker",
+    "items": [
+      {
+        "id": "allente", "name": "Allente", "color": "#e6007e", "initials": "AL", "lastChecked": "2026-04-19",
+        "url": "https://www.allente.no/", "favicon": "https://www.allente.no/Content/Favicons/Allente/apple-touch-icon.png?v=jw62wyrjWy",
+        "tiers": [
+          { "label": "Start", "price": 399, "info": "<ul><li>TV-kanaler</li><li>Strømmetjenester</li></ul>" },
+          { "label": "Pluss", "price": 499, "info": "<ul><li>Flere TV-kanaler</li><li>Flere strømmetjenester</li></ul>" },
+          { "label": "Total", "price": 599, "info": "<ul><li>Alle TV-kanaler</li><li>Alle strømmetjenester</li></ul>" }
+        ]
+      },
+      {
+        "id": "altibox", "name": "Altibox", "color": "#00a651", "initials": "AB", "lastChecked": "2026-04-19",
+        "favicon": "https://www.altibox.no/wp-content/uploads/2016/04/altibox-favicon.png",
+        "isBundle": true,
+        "linkedInternet": "altibox-internett",
+        "regions": [
+          {
+            "id": "altifiber", "label": "Altifiber",
+            "url": "https://altifiber.no/produkter-og-priser/",
+            "decoderPrice": 79,
+            "tiers": [
+              { "label": "Medium (100 Mbps)", "price": 1329, "priceValidFrom": "2026-05-01", "tvPoeng": 60, "info": "<ul><li>100 Mbps</li><li>60 TV-poeng</li><li>TV-pakke inkludert</li></ul>" },
+              { "label": "Standard (500 Mbps)", "price": 1429, "priceValidFrom": "2026-05-01", "tvPoeng": 60, "info": "<ul><li>500 Mbps</li><li>60 TV-poeng</li><li>TV-pakke inkludert</li></ul>" },
+              { "label": "Ekstra (1000 Mbps)", "price": 2049, "priceValidFrom": "2026-05-01", "tvPoeng": 110, "info": "<ul><li>1000 Mbps</li><li>110 TV-poeng</li><li>TV-pakke inkludert</li></ul>" }
+            ]
+          },
+          {
+            "id": "bergen", "label": "Bergen Fiber",
+            "url": "https://bergenfiber.no/produkter-og-priser/",
+            "decoderPrice": 69,
+            "tiers": [
+              { "label": "Standard (500 Mbps)", "price": 1339, "tvPoeng": 60, "info": "<ul><li>500 Mbps</li><li>60 TV-poeng</li><li class=\"notice\">999 kr/mnd de første 12 mnd for nye kunder</li></ul>" },
+              { "label": "Ekstra (1000 Mbps)", "price": 1959, "tvPoeng": 100, "includes": ["netflix"], "info": "<ul><li>1000 Mbps</li><li>100 TV-poeng</li><li>Netflix</li></ul>" }
+            ]
+          },
+          {
+            "id": "hkraft", "label": "Haugaland Kraft",
+            "url": "https://hkraft.no/produkter/internett-og-tv/produkter-og-priser/",
+            "defaultTier": 1,
+            "decoderPrice": 69,
+            "tiers": [
+              { "label": "Senior (80 Mbps)", "price": 1019, "tvPoeng": 0, "info": "<ul><li>80 Mbps</li><li>Fast kanalpakke</li></ul>" },
+              { "label": "Medium (100 Mbps)", "price": 1239, "tvPoeng": 60, "info": "<ul><li>100 Mbps</li><li>60 TV-poeng</li><li>12 faste kanaler</li></ul>" },
+              { "label": "Standard (500 Mbps)", "price": 1339, "tvPoeng": 60, "info": "<ul><li>500 Mbps</li><li>60 TV-poeng</li><li>12 faste kanaler</li></ul>" },
+              { "label": "Ekstra (1000 Mbps)", "price": 1959, "tvPoeng": 110, "includes": ["netflix"], "info": "<ul><li>1000 Mbps</li><li>110 TV-poeng</li><li>12 faste kanaler</li><li>Netflix</li></ul>" }
+            ]
+          },
+          {
+            "id": "nte", "label": "NTE",
+            "url": "https://nte.no/altibox/",
+            "decoderPrice": 69, "decoderNote": "Dekoderpris ikke bekreftet",
+            "tiers": [
+              { "label": "Standard (500 Mbps)", "price": 1439, "priceFrom": { "date": "2026-05-01", "price": 1489 }, "tvPoeng": 60, "info": "<ul><li>500 Mbps</li><li>60 TV-poeng</li></ul>" },
+              { "label": "Ekstra (1000 Mbps)", "price": 1959, "priceFrom": { "date": "2026-05-01", "price": 1999 }, "tvPoeng": 110, "includes": ["netflix"], "info": "<ul><li>1000 Mbps</li><li>110 TV-poeng</li><li>Netflix</li></ul>" }
+            ]
+          },
+          {
+            "id": "viken", "label": "Viken Fiber",
+            "url": "https://vikenfiber.no/produkter/",
+            "decoderPrice": 69,
+            "note": "Programarkiv og start forfra, 500 timer opptak, Nettvern mot svindel",
+            "tiers": [
+              { "label": "Standard (500 Mbps)", "price": 1339, "priceFrom": { "date": "2026-05-01", "price": 1389 }, "tvPoeng": 60, "info": "<ul><li>500 Mbps</li><li>60 TV-poeng</li></ul>" },
+              { "label": "Ekstra (1000 Mbps)", "price": 1959, "priceFrom": { "date": "2026-05-01", "price": 2009 }, "tvPoeng": 110, "includes": ["netflix"], "info": "<ul><li>1000 Mbps</li><li>110 TV-poeng</li><li>Netflix</li></ul>" }
+            ]
+          }
+        ],
+        "pointsOptions": [
+          { "cat": "Strømmetjenester", "id": "pts-netflix", "label": "Netflix", "points": 60, "includesService": "netflix", "includesTier": 0 },
+          { "cat": "Strømmetjenester", "id": "pts-viaplay", "label": "Viaplay", "points": 50, "includesService": "viaplay", "includesTier": 0 },
+          { "cat": "Strømmetjenester", "id": "pts-max-basis", "label": "HBO Max Basis", "points": 20, "includesService": "max", "includesTier": 0 },
+          { "cat": "Strømmetjenester", "id": "pts-max-standard", "label": "HBO Max Standard", "points": 60, "includesService": "max", "includesTier": 1 },
+          { "cat": "Strømmetjenester", "id": "pts-max-premium", "label": "HBO Max Premium", "points": 80, "includesService": "max", "includesTier": 3 },
+          { "cat": "Strømmetjenester", "id": "pts-tv2", "label": "TV 2 Play Basis (med reklame)", "points": 10, "includesService": "tv2", "includesTier": 0 },
+          { "cat": "Strømmetjenester", "id": "pts-skyshowtime", "label": "SkyShowtime", "points": 30, "includesService": "skyshowtime", "includesTier": 0 },
+          { "cat": "Strømmetjenester", "id": "pts-filmfavoritter", "label": "FilmFavoritter (Viaplay)", "points": 15 },
+          { "cat": "Strømmetjenester", "id": "pts-nordiskfilm", "label": "Nordisk Film+", "points": 10, "includesService": "nordiskfilm" },
+          { "cat": "Sportskanaler", "id": "pts-vsport", "label": "Viaplay Sport", "points": 40, "includesService": "viaplay", "includesTier": 3 },
+          { "cat": "Sportskanaler", "id": "pts-max-sport", "label": "HBO Max Sport", "points": 25, "includesService": "max", "includesTier": 2 },
+          { "cat": "Sportskanaler", "id": "pts-tv2sport", "label": "TV 2 Sport 1 & 2", "points": 5, "includesService": "tv2", "includesTier": 1 },
+          { "cat": "Sportskanaler", "id": "pts-eurosport", "label": "Eurosport", "points": 5, "sports": ["sykling", "tennis"] },
+          { "cat": "Valgfrie kanaler", "id": "pts-bbcnordic", "label": "BBC Nordic", "points": 5 },
+          { "cat": "Valgfrie kanaler", "id": "pts-natgeo", "label": "National Geographic", "points": 2 },
+          { "cat": "Valgfrie kanaler", "id": "pts-cartoonito", "label": "Cartoonito", "points": 2 },
+          { "cat": "Valgfrie kanaler", "id": "pts-lovenature", "label": "Love Nature", "points": 3 },
+          { "cat": "Valgfrie kanaler", "id": "pts-disneychannel", "label": "Disney Channel", "points": 1 }
+        ]
+      },
+      {
+        "id": "strim", "name": "Strim", "color": "#00c389", "initials": "S", "lastChecked": "2026-04-19", "addonsLabel": "Tilpass pakke",
+        "url": "https://www.strim.no/", "favicon": "https://www.strim.no/favicon-32x32.png",
+        "note": "<div style=\"font-weight:600;color:var(--text);margin-bottom:0.3rem\">Inkludert i alle pakker:</div><ul><li>TV 2 Play Basis med reklame</li><li><details><summary>13 TV-kanaler</summary><span class=\"channel-list\">TV 2 Direkte, TV 2 Nyheter, TV 2 Zebra, TV 2 Livsstil, TVNorge, REX, FEM, VOX, TV3, TV3+, CNN, BBC News, TV 6</span></details></li></ul>",
+        "tiers": [
+          { "label": "Smart", "price": 399, "includes": ["tv2"], "info": "<ul><li>Én valgfri streamingtjeneste:<ul class=\"options\"><li>HBO Max Basis med reklame</li><li>Viaplay Film &amp; Serier med reklame</li></ul></li></ul>" },
+          { "label": "Maks", "price": 499, "includes": ["tv2", "max", "viaplay", "skyshowtime", "nordiskfilm"], "includesTiers": {"skyshowtime": 1}, "info": "<ul><li>HBO Max Basis med reklame</li><li>Viaplay Film &amp; Serier med reklame</li><li>SkyShowtime uten reklame</li><li>Nordisk Film+</li></ul>" }
+        ],
+        "addons": [
+          { "id": "strim-max", "label": "HBO Max Basis", "price": 0, "minTier": 0, "maxTier": 0, "choiceGroup": "strim-valg", "includesService": "max", "includesTier": 0 },
+          { "id": "strim-viaplay", "label": "Viaplay Film & Serier", "price": 0, "minTier": 0, "maxTier": 0, "choiceGroup": "strim-valg", "includesService": "viaplay", "includesTier": 0 },
+          { "id": "strim-maxsport", "label": "Max Sport", "price": 50, "minTier": 0, "requiresService": "max", "includesService": "max", "includesTier": 2, "info": "NBA, Allsvenskan, Grand Slams, Grand Tours, PGA Tour og OL, pluss 2 direkte Eurosport-kanaler" },
+          { "id": "strim-sportskanaler", "label": "Sportskanaler", "price": 100, "minTier": 0, "includesService": "nrk", "includesTier": 0, "info": "NRK live-sport, Tippekampen, utvalgte kamper fra Eliteserien og Champions League, pluss vintersport, håndball, sykkel og Formel 1" },
+          { "id": "strim-tv2sport", "label": "TV 2 Play Sport", "price": 300, "minTier": 0, "bundlesSportskanaler": true, "includesService": "tv2", "includesTier": 2, "info": "Champions League, LaLiga og norsk toppfotball, pluss håndball, ishockey, basket, sykling, poker, sjakk og vintersport" },
+          { "id": "strim-tv2sportpluss", "label": "TV 2 Play Sport Pluss", "price": 100, "minTier": 0, "requires": "strim-tv2sport", "includesService": "tv2", "includesTier": 2, "sports": ["fa-cup", "bundesliga", "ligue-1", "efl-championship", "carabao-cup", "europa-league", "conference-league"], "info": "Alt i TV 2 Play Sport, pluss hele FA Cupen og utvalgte kamper fra Bundesliga, Ligue 1, EFL Championship, Carabao Cup, Europa League og Conference League" },
+          { "id": "strim-viaplaytotal", "label": "Viaplay Total", "price": 799, "minTier": 0, "bundlesSportskanaler": true, "includesService": "viaplay", "includesTier": 3, "info": "Premier League, Europa League, Conference League og Bundesliga, pluss Formel 1, Viaplay Vinter, NHL og Ryder Cup" },
+          { "id": "strim-viaplaytotalpluss", "label": "Viaplay Total Pluss", "price": 50, "minTier": 0, "requires": "strim-viaplaytotal", "includesService": "viaplay", "includesTier": 4, "info": "Alt i Viaplay Total, pluss FA Cup, LaLiga og Toppserien (kvinner)" }
+        ]
+      }
+    ]
+  },
+  {
+    "category": "Internett",
+    "items": [
+      {
+        "id": "altibox-internett", "name": "Altibox", "color": "#00a651", "initials": "AB", "lastChecked": "2026-04-19",
+        "url": "https://www.altibox.no/", "favicon": "https://www.altibox.no/wp-content/uploads/2016/04/altibox-favicon.png",
+        "linkedBundle": "altibox",
+        "tiers": [
+          { "label": "150 Mbps", "price": 869, "priceFrom": { "date": "2026-05-01", "price": 919 } },
+          { "label": "250 Mbps", "price": 969, "priceFrom": { "date": "2026-05-01", "price": 1019 } },
+          { "label": "500 Mbps", "price": 1069, "priceFrom": { "date": "2026-05-01", "price": 1119 } },
+          { "label": "750 Mbps", "price": 1119, "priceFrom": { "date": "2026-05-01", "price": 1169 } },
+          { "label": "1000 Mbps", "price": 1369, "priceFrom": { "date": "2026-05-01", "price": 1419 } }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,51 @@
+name: Update EUR/NOK exchange rate
+
+on:
+  schedule:
+    - cron: '0 6 1 * *'  # 06:00 UTC on the 1st of each month
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  update-rate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Fetch EUR to NOK rate from Frankfurter
+        id: rate
+        run: |
+          set -euo pipefail
+          response=$(curl -sSfL --retry 3 'https://api.frankfurter.dev/v1/latest?from=EUR&to=NOK')
+          rate=$(echo "$response" | jq -r '.rates.NOK')
+          date=$(echo "$response" | jq -r '.date')
+          if [ -z "$rate" ] || [ "$rate" = "null" ]; then
+            echo "Failed to parse rate from response: $response"
+            exit 1
+          fi
+          echo "rate=$rate" >> "$GITHUB_OUTPUT"
+          echo "date=$date" >> "$GITHUB_OUTPUT"
+
+      - name: Write exchange-rate.json
+        run: |
+          cat > exchange-rate.json <<EOF
+          {
+            "eur_nok": ${{ steps.rate.outputs.rate }},
+            "updated": "${{ steps.rate.outputs.date }}",
+            "source": "https://api.frankfurter.dev/v1/latest?from=EUR&to=NOK"
+          }
+          EOF
+
+      - name: Commit if changed
+        run: |
+          if git diff --quiet exchange-rate.json; then
+            echo "Rate unchanged, nothing to commit."
+            exit 0
+          fi
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add exchange-rate.json
+          git commit -m "chore: update EUR/NOK rate to ${{ steps.rate.outputs.rate }} (${{ steps.rate.outputs.date }})"
+          git push
