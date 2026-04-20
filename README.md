@@ -30,7 +30,3 @@ Validate `data.json` before committing:
 ```sh
 node scripts/validate.mjs
 ```
-
-## License
-
-MIT
