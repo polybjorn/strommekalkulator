@@ -2,8 +2,6 @@
 
 Calculator for Norwegian streaming services. Pick services, tiers, and add-ons and see the monthly and yearly total.
 
-**Live:** https://polybjorn.github.io/strommekalkulator/
-
 ## Features
 
 - Monthly and yearly total for any combination of services
