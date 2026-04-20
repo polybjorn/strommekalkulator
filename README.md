@@ -1,25 +1,36 @@
 # Strømmekalkulator
 
-Interactive calculator for comparing and combining streaming services available in Norway. Select services, tiers, and add-ons to see total monthly and yearly cost.
+Interactive calculator for comparing and combining streaming services available in Norway.
 
-## Services
+**Live:** https://polybjorn.github.io/strommekalkulator/
 
-Streaming services, bundle packages, and an internet option. Each card supports tier selection, add-ons, yearly billing where applicable, and detailed content info via the info button.
+## Features
 
-## Sports filter
+- Select services, tiers, and add-ons; see monthly and yearly totals
+- Sports filter (football, winter sports, tennis, Formula 1, etc.)
+- Shareable URL — current selection is encoded in the hash
+- No build step, no dependencies — vanilla HTML/CSS/JS
 
-Filter services by sport (football leagues, winter sports, tennis, etc.) from the bottom-left Sportsfilter button. Matching services show a badge per sport; services that can't provide the selected sports are dimmed.
+## Data
 
-## State sharing
+Prices live in `data.json`. Each service has a `lastChecked` date; bump it when you verify prices and the footer's "Sist oppdatert" will follow the most recent date across all services.
 
-The current selection is encoded in the URL hash, so you can share a link with a specific configuration.
+EUR/NOK rate in `exchange-rate.json` is refreshed monthly by a GitHub Action (only F1 TV bills in EUR).
 
-## Usage
+## Local dev
 
-Serve via any web server and open `index.html`. No dependencies or build step.
+Serve the directory with any static server:
 
-Prices are stored in `data.json` and loaded at runtime.
+```sh
+python3 -m http.server 8765
+```
 
-## Prices
+Validate `data.json` before committing:
 
-All prices are sourced from official service pages. Each service in `data.json` has a `lastChecked` date; bump it when you verify a service's prices, and the footer's "Sist oppdatert" label will follow the most recent date across all services.
+```sh
+node scripts/validate.mjs
+```
+
+## License
+
+MIT

@@ -43,7 +43,7 @@
         "url": "https://f1tv.formula1.com/",
         "favicon": "https://t1.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=http://f1tv.formula1.com&size=128",
         "currency": "EUR",
-        "note": "<p style=\"margin:0\">F1 TV fakturerer i euro. Totalsum konverteres til kroner med valutakursen vist i bunnlinja.</p>",
+        "note": "<p style=\"margin:0\">F1 TV fakturerer i euro. Totalsum konverteres til kroner med gjeldende valutakurs: <span data-eur-rate></span></p>",
         "tiers": [
           { "label": "Access", "price": 3.50, "yearlyPrice": 30, "info": "<ul><li>Live timing, telemetri, dekkbruk og driver maps</li><li>Opptak av løp (tidsforsinket)</li><li>Team radio-sammendrag</li><li>Eksklusive show, dokumentarer og arkiv</li><li class=\"negative\">Ingen live video av F1-økter</li></ul>" },
           { "label": "Pro", "price": 18, "yearlyPrice": 140, "sports": ["formel-1"], "hideSportSummary": true, "info": "<ul><li>Live alle F1-økter, reklamefritt</li><li>Onboard-kameraer og team radio</li><li>F2, F3, F1 Academy og Porsche Supercup</li><li>Eksklusive show fra race-helgene</li><li>Live timing og telemetri</li></ul>" },

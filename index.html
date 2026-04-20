@@ -295,11 +295,6 @@
       color: var(--accent);
     }
 
-    #eur-rate {
-      margin-left: 0.5rem;
-      opacity: 0.8;
-    }
-
     .tier-toggle {
       margin-top: 0.5rem;
       font-size: 0.8rem;
@@ -1181,6 +1176,23 @@
       font-size: 0.8rem;
     }
 
+    footer a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+
+    footer a:hover { text-decoration: underline; }
+
+    .footer-github {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      margin-top: 0.5rem;
+      color: var(--text-muted);
+    }
+
+    .footer-github:hover { color: var(--accent); }
+
     @media (max-width: 500px) {
       header h1 {
         font-size: 1.4rem;
@@ -1222,7 +1234,13 @@
     <span class="total-yearly" id="total-yearly">(0 kr/år)</span>
     <button class="total-reset" id="total-reset" title="Nullstill alle valg">Nullstill</button>
   </div>
-  <footer>Prisene er veiledende og kan avvike. <span id="last-updated"></span> <span id="eur-rate"></span></footer>
+  <footer>
+    <div>Prisene er veiledende og kan avvike. <span id="last-updated"></span></div>
+    <a class="footer-github" href="https://github.com/polybjorn/strommekalkulator" target="_blank" rel="noopener" aria-label="Vis kildekoden på GitHub">
+      <svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>
+      <span>GitHub</span>
+    </a>
+  </footer>
 
   <script>
     let services = [];
@@ -1292,7 +1310,7 @@
         if (data && typeof data.eur_nok === 'number' && data.eur_nok > 0) {
           EUR_TO_NOK = data.eur_nok;
           EUR_RATE_UPDATED = data.updated || '';
-          if (services.length) { render(); updateRateFooter(); }
+          if (services.length) { render(); }
         }
       })
       .catch(() => {});
@@ -1316,10 +1334,14 @@
       return `${Math.round(yearlyPrice / 12)} kr`;
     }
 
-    function updateRateFooter() {
-      const el = document.getElementById('eur-rate');
-      if (!el) return;
-      el.textContent = `€1 = ${EUR_TO_NOK.toFixed(2).replace('.', ',')} kr${EUR_RATE_UPDATED ? ` (oppdatert ${EUR_RATE_UPDATED})` : ''}`;
+    function fmtEurRate() {
+      return `€1 = ${EUR_TO_NOK.toFixed(2).replace('.', ',')} kr${EUR_RATE_UPDATED ? ` (oppdatert ${EUR_RATE_UPDATED})` : ''}`;
+    }
+
+    function populateEurRateTargets(root) {
+      (root || document).querySelectorAll('[data-eur-rate]').forEach(el => {
+        el.textContent = fmtEurRate();
+      });
     }
 
     fetch('data.json')
@@ -1361,7 +1383,6 @@
           if (!getService(id)) delete state[id];
         }
         updateFooter();
-        updateRateFooter();
         return document.fonts.ready;
       })
       .then(() => {
@@ -1984,6 +2005,7 @@
           <div class="modal-tab-panel" data-tab-panel="tillegg" hidden>${tilleggHtml}</div>
         ` : pakkerHtml}
       `);
+      populateEurRateTargets(content);
       content.querySelectorAll('.modal-tab').forEach(tab => {
         tab.addEventListener('click', () => {
           content.querySelectorAll('.modal-tab').forEach(t => {
