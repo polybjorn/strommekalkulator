@@ -1,21 +1,21 @@
 # Strømmekalkulator
 
-Interactive calculator for comparing and combining streaming services available in Norway.
+Calculator for Norwegian streaming services. Pick services, tiers, and add-ons and see the monthly and yearly total.
 
 **Live:** https://polybjorn.github.io/strommekalkulator/
 
 ## Features
 
-- Select services, tiers, and add-ons; see monthly and yearly totals
+- Monthly and yearly total for any combination of services
 - Sports filter (football, winter sports, tennis, Formula 1, etc.)
-- Shareable URL — current selection is encoded in the hash
-- No build step, no dependencies — vanilla HTML/CSS/JS
+- Current selection is encoded in the URL hash, so the link is shareable
+- Vanilla HTML, CSS, and JS. No build step, no dependencies
 
 ## Data
 
-Prices live in `data.json`. Each service has a `lastChecked` date; bump it when you verify prices and the footer's "Sist oppdatert" will follow the most recent date across all services.
+Prices live in `data.json`. Each service has a `lastChecked` date. Bump it when you verify prices, and the footer's "Sist oppdatert" label follows the most recent date across all services.
 
-EUR/NOK rate in `exchange-rate.json` is refreshed monthly by a GitHub Action (only F1 TV bills in EUR).
+Prices in other currencies are converted to NOK using the rate in `exchange-rate.json`, which a GitHub Action refreshes monthly.
 
 ## Local dev
 
