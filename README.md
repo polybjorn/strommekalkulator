@@ -1,6 +1,6 @@
 # Strømmekalkulator
 
-![Strømmekalkulator](docs/screenshot.png)
+![Strømmekalkulator](docs/preview.png)
 
 Calculator for Norwegian streaming services. Pick services, tiers, and add-ons and see the monthly and yearly total.
 
