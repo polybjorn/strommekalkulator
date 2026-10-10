@@ -22,7 +22,8 @@ jobs:
       - name: Checkout
         env:
           TOKEN: ${{ github.token }}
-          REF: main
+          REF: origin/main
+          BRANCH: main
           DEPTH: "0"
           CREDENTIAL_HELPER: "true"
         run: bash "${RUNNER_TEMP:-/tmp}/ci-actions/checkout/checkout.sh"
