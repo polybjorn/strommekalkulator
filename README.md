@@ -22,7 +22,7 @@ Pick any combination of services for a monthly and yearly total, and filter by s
 
 ## Data
 
-Prices live in `data.json`. Each service has a `lastChecked` date that I bump manually when I verify prices; the footer's "Sist oppdatert" label follows the most recent date across all services. Exchange rates for non-NOK prices live in `exchange-rate.json` and are refreshed monthly by a scheduled CI job.
+Prices live in `data.json`. Each service has a `lastChecked` date that I bump manually when I verify prices; the footer's "Sist oppdatert" label follows the most recent date across all services. Non-NOK prices convert at the EUR/NOK rate the GitHub Pages workflow fetches at each deploy and on the 1st of each month; the committed `exchange-rate.json` is the rate for local runs.
 
 Validate `data.json` before committing (CI runs the same check):
 

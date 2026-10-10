@@ -1,0 +1,71 @@
+# Pages deploys from this workflow rather than from the branch so that the
+# month's EUR/NOK rate is fetched at deploy time instead of committed: the
+# forge is origin and its CI token cannot push to protected main. A failed
+# rate fetch fails the deploy, which leaves the previous deployment and its
+# rate live.
+name: Pages
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  schedule:
+    - cron: '0 6 1 * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+      - run: node scripts/validate.mjs
+
+      - name: Fetch the rate and write exchange-rate.json
+        if: github.event_name != 'pull_request'
+        run: |
+          set -euo pipefail
+          curl -sSfL --retry 3 'https://api.frankfurter.dev/v1/latest?from=EUR&to=NOK' > "$RUNNER_TEMP/rate.json"
+          python3 - "$RUNNER_TEMP/rate.json" <<'PY'
+          import json, sys
+          r = json.load(open(sys.argv[1]))
+          rate, date = r['rates']['NOK'], r['date']
+          if not isinstance(rate, (int, float)) or rate <= 0 or not date:
+            sys.exit('unexpected response: %r' % r)
+          with open('exchange-rate.json', 'w') as f:
+            json.dump({'eur_nok': rate, 'updated': date,
+                       'source': 'https://api.frankfurter.dev/v1/latest?from=EUR&to=NOK'}, f, indent=2)
+            f.write('\n')
+          print('EUR/NOK %s (%s)' % (rate, date))
+          PY
+
+      - name: Assemble the site
+        if: github.event_name != 'pull_request'
+        run: |
+          mkdir _site
+          git ls-files -z -- ':!:.*' ':!:scripts' ':!:*.md' | xargs -0 cp --parents -t _site
+      - uses: actions/upload-pages-artifact@v5
+        if: github.event_name != 'pull_request'
+
+  deploy:
+    if: github.event_name != 'pull_request'
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v5
