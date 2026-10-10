@@ -1,0 +1,75 @@
+# Commits the month's EUR/NOK rate to main and syncs it to GitHub in the same
+# job: a push made with the job's own token starts no new workflow run, so
+# ci.yml's sync never sees this commit.
+name: Update EUR/NOK exchange rate
+
+on:
+  schedule:
+    - cron: '0 6 1 * *'
+  workflow_dispatch:
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  update-rate:
+    runs-on: docker
+    timeout-minutes: 10
+    steps:
+      - name: Fetch ci-actions
+        run: git clone -q --depth 1 --branch v1 "$GITHUB_SERVER_URL/bjorn/ci-actions.git" "${RUNNER_TEMP:-/tmp}/ci-actions"
+      - name: Checkout
+        env:
+          TOKEN: ${{ github.token }}
+          REF: main
+          DEPTH: "0"
+          CREDENTIAL_HELPER: "true"
+        run: bash "${RUNNER_TEMP:-/tmp}/ci-actions/checkout/checkout.sh"
+
+      # python3 rather than jq, which the docker image does not carry
+      - name: Fetch the rate and write exchange-rate.json
+        id: rate
+        run: |
+          set -euo pipefail
+          curl -sSfL --retry 3 'https://api.frankfurter.dev/v1/latest?from=EUR&to=NOK' > "$RUNNER_TEMP/rate.json"
+          python3 - "$RUNNER_TEMP/rate.json" <<'EOF' >> "$GITHUB_OUTPUT"
+          import json, sys
+          r = json.load(open(sys.argv[1]))
+          rate, date = r['rates']['NOK'], r['date']
+          if not isinstance(rate, (int, float)) or not date:
+            sys.exit('unexpected response: %r' % r)
+          with open('exchange-rate.json', 'w') as f:
+            json.dump({'eur_nok': rate, 'updated': date,
+                       'source': 'https://api.frankfurter.dev/v1/latest?from=EUR&to=NOK'}, f, indent=2)
+            f.write('\n')
+          print('rate=%s' % rate)
+          print('date=%s' % date)
+          EOF
+
+      - run: node scripts/validate.mjs
+
+      # The committer is a public identity because this commit goes to GitHub
+      # as it is, and the sync's denylist gate reads identities.
+      - name: Commit and push to the forge
+        id: commit
+        run: |
+          set -euo pipefail
+          if git diff --quiet exchange-rate.json; then
+            echo "Rate unchanged, nothing to commit."
+            exit 0
+          fi
+          git -c user.name='github-actions[bot]' \
+              -c user.email='41898282+github-actions[bot]@users.noreply.github.com' \
+              commit -q -m "chore: update EUR/NOK rate to ${{ steps.rate.outputs.rate }} (${{ steps.rate.outputs.date }})" exchange-rate.json
+          git push origin HEAD:refs/heads/main
+          echo "pushed=true" >> "$GITHUB_OUTPUT"
+
+      - name: Push to GitHub
+        if: steps.commit.outputs.pushed == 'true'
+        env:
+          DEPLOY_KEY: ${{ secrets.PUBLISH_DEPLOY_KEY }}
+          DENYLIST: ${{ secrets.DEPLOY_DENYLIST }}
+          REPO: polybjorn/strommekalkulator
+          REF: refs/heads/main
+        run: bash "${RUNNER_TEMP:-/tmp}/ci-actions/github-sync/github-sync.sh"
