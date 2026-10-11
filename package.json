@@ -1,0 +1,8 @@
+{
+  "name": "strommekalkulator",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "preview:build": "node scripts/preview-build.mjs"
+  }
+}

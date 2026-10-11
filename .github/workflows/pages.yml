@@ -52,7 +52,7 @@ jobs:
         if: github.event_name != 'pull_request'
         run: |
           mkdir _site
-          git ls-files -z -- ':!:.*' ':!:scripts' ':!:*.md' | xargs -0 cp --parents -t _site
+          git ls-files -z -- ':!:.*' ':!:scripts' ':!:*.md' ':!:package.json' | xargs -0 cp --parents -t _site
       - uses: actions/upload-pages-artifact@v5
         if: github.event_name != 'pull_request'
 
