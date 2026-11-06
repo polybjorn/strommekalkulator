@@ -16,7 +16,11 @@
   <meta property="og:title" content="Strømmekalkulator: sammenlign norske strømmetjenester">
   <meta property="og:description" content="Velg norske strømmetjenester og se hva de koster per måned og år.">
   <meta property="og:url" content="https://polybjorn.github.io/strommekalkulator/">
-  <meta name="twitter:card" content="summary">
+  <meta property="og:image" content="https://polybjorn.github.io/strommekalkulator/docs/preview.png">
+  <meta property="og:image:width" content="2940">
+  <meta property="og:image:height" content="1572">
+  <meta property="og:image:alt" content="Strømmekalkulator med kort for norske strømmetjenester og totalpris nederst">
+  <meta name="twitter:card" content="summary_large_image">
 
   <script type="application/ld+json">
   {
@@ -181,7 +185,7 @@
 
     .bundle-note {
       display: block;
-      font-size: 0.7rem;
+      font-size: 0.75rem;
       color: var(--text-muted);
       font-weight: 400;
     }
@@ -218,7 +222,7 @@
       align-items: center;
       justify-content: center;
       font-weight: 700;
-      font-size: 0.7rem;
+      font-size: 0.75rem;
       color: #fff;
       flex-shrink: 0;
       overflow: hidden;
@@ -242,7 +246,7 @@
     }
 
     .card-subtitle {
-      font-size: 0.7rem;
+      font-size: 0.75rem;
       font-weight: 400;
       color: var(--text-muted);
     }
@@ -377,8 +381,8 @@
       position: absolute;
       top: 0.6rem;
       right: 0.6rem;
-      width: 22px;
-      height: 22px;
+      width: 24px;
+      height: 24px;
       border-radius: 50%;
       border: 1.5px solid var(--border);
       background: var(--surface);
@@ -572,7 +576,7 @@
     }
 
     .addon-row-tier {
-      font-size: 0.72rem;
+      font-size: 0.75rem;
       font-weight: 500;
       color: var(--text-muted);
       margin-left: 0.4rem;
@@ -624,7 +628,7 @@
     }
 
     .modal-tier-sources {
-      font-size: 0.7rem;
+      font-size: 0.75rem;
       color: var(--text-muted);
       margin-top: 0.6rem;
       opacity: 0.75;
@@ -840,7 +844,7 @@
     }
 
     .addon-info {
-      font-size: 0.7rem;
+      font-size: 0.75rem;
       color: var(--text-muted);
       font-weight: 400;
       margin-left: 0.4rem;
@@ -1124,7 +1128,7 @@
     .sport-filter-count {
       background: var(--accent);
       color: #fff;
-      font-size: 0.7rem;
+      font-size: 0.75rem;
       font-weight: 700;
       min-width: 1.2em;
       height: 1.2em;
@@ -1152,7 +1156,7 @@
     }
 
     .sport-badge {
-      font-size: 0.7rem;
+      font-size: 0.75rem;
       font-weight: 500;
       padding: 0.15rem 0.5rem;
       border-radius: 999px;
@@ -1193,6 +1197,23 @@
 
     .footer-github:hover { color: var(--accent); }
 
+    .skip-link {
+      position: absolute;
+      left: 1rem;
+      top: -3rem;
+      z-index: 300;
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
+      background: var(--surface);
+      color: var(--accent);
+      font-weight: 600;
+      text-decoration: none;
+    }
+
+    .skip-link:focus { top: 1rem; }
+
+    #app:empty { min-height: 100vh; }
+
     @media (max-width: 500px) {
       header h1 {
         font-size: 1.4rem;
@@ -1214,11 +1235,14 @@
   </style>
 </head>
 <body>
+  <a class="skip-link" href="#main">Hopp til innholdet</a>
   <header>
     <h1>Strømmekalkulator</h1>
     <p>Velg tjenester og se hva det koster totalt</p>
   </header>
-  <div class="container" id="app"></div>
+  <main id="main">
+    <div class="container" id="app"></div>
+  </main>
   <div class="modal-overlay" id="modal-overlay" style="display:none">
     <div class="modal" id="modal-content" role="dialog" aria-modal="true" aria-labelledby="modal-title"></div>
   </div>
@@ -1247,6 +1271,17 @@
     const state = {};
     const openTiers = new Set();
     const sportFilter = new Set();
+
+    // White initials on a light brand colour fall under 4.5:1, so those get dark text.
+    function initialsColor(hex) {
+      let h = hex.replace('#', '');
+      if (h.length === 3) h = h.split('').map(c => c + c).join('');
+      const lum = [0, 2, 4]
+        .map(i => parseInt(h.slice(i, i + 2), 16) / 255)
+        .map(v => (v <= 0.03928 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4));
+      const l = 0.2126 * lum[0] + 0.7152 * lum[1] + 0.0722 * lum[2];
+      return 1.05 / (l + 0.05) >= 4.5 ? '#fff' : '#1d1d1f';
+    }
 
     const SPORT_GROUPS = [
       { label: 'Fotball', sports: [
@@ -1593,8 +1628,8 @@
         <div class="card ${sel && sel.active ? 'selected' : ''} ${includedBy ? 'included' : ''} ${isInfoOnly && !includedBy ? 'info-only' : ''} ${dimmed ? 'dimmed' : ''}" data-id="${s.id}" ${cardAttrs}>
           ${infoBtn}
           <div class="card-header">
-            <div class="card-icon" style="background:${s.favicon ? 'transparent' : s.color}" data-color="${s.color}" data-initials="${s.initials}">
-              ${s.favicon ? `<img class="favicon" src="${s.favicon}" alt="${s.name}">` : s.initials}
+            <div class="card-icon" style="background:${s.favicon ? 'transparent' : s.color};color:${initialsColor(s.color)}" data-color="${s.color}" data-initials="${s.initials}">
+              ${s.favicon ? `<img class="favicon" src="${s.favicon}" alt="${s.name}" width="36" height="36">` : s.initials}
             </div>
             <div class="card-text">
               <div class="card-name">${s.name}</div>
@@ -1987,9 +2022,9 @@
 
       const content = openModalWithContent(`
         <div class="modal-header">
-          <div class="card-icon" style="background:${s.favicon ? 'transparent' : s.color}">
+          <div class="card-icon" style="background:${s.favicon ? 'transparent' : s.color};color:${initialsColor(s.color)}">
             ${s.favicon
-              ? `<img class="favicon" src="${s.favicon}" alt="${s.name}">`
+              ? `<img class="favicon" src="${s.favicon}" alt="${s.name}" width="36" height="36">`
               : s.initials}
           </div>
           <h2 id="modal-title">${s.name}${region ? ' (' + region.label + ')' : ''}</h2>

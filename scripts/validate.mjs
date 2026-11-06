@@ -2,7 +2,7 @@
 // Validates data.json consistency against itself and against index.html's SPORT_GROUPS.
 // Exits 1 on any hard error, 0 with warnings allowed.
 // Usage: node scripts/validate.mjs
-import { readFileSync } from 'node:fs';
+import { existsSync, readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
 
@@ -78,6 +78,12 @@ const checkIncludesRef = (obj, where) => {
 // --- per-service checks ---
 for (const s of services) {
   const here = `service ${s.id}`;
+
+  // logos are served from the repo, so no visitor request reaches a provider's host
+  if (s.favicon != null) {
+    if (!/^logos\/[a-z0-9-]+\.png$/.test(s.favicon)) err(`${here}: favicon "${s.favicon}" is not a logos/*.png path`);
+    else if (!existsSync(join(root, s.favicon))) err(`${here}: favicon ${s.favicon} does not exist`);
+  }
 
   // tier-level
   const tiers = tiersOf(s);

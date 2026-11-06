@@ -4,17 +4,17 @@
     "items": [
       {
         "id": "apple", "name": "Apple TV+", "color": "#555", "initials": "A+", "lastChecked": "2026-04-19",
-        "url": "https://tv.apple.com/no", "favicon": "https://tv.apple.com/apple-touch-icon.png",
+        "url": "https://tv.apple.com/no", "favicon": "logos/apple.png",
         "tiers": [{ "label": "Standard", "price": 119 }]
       },
       {
         "id": "britbox", "name": "BritBox", "color": "#c4281c", "initials": "BB", "lastChecked": "2026-04-19",
-        "url": "https://www.britbox.com/no/", "favicon": "https://www.britbox.com/Content/img/favicon/apple-touch-icon-v2.png",
+        "url": "https://www.britbox.com/no/", "favicon": "logos/britbox.png",
         "tiers": [{ "label": "Standard", "price": 89, "yearlyPrice": 699 }]
       },
       {
         "id": "crunchyroll", "name": "Crunchyroll", "color": "#f47521", "initials": "CR", "lastChecked": "2026-04-19",
-        "url": "https://www.crunchyroll.com/", "favicon": "https://www.crunchyroll.com/favicons/favicon-32x32.png",
+        "url": "https://www.crunchyroll.com/", "favicon": "logos/crunchyroll.png",
         "note": "<div style=\"font-weight:600;color:var(--text);margin-bottom:0.3rem\">Inkludert i alle pakker:</div><ul><li>Nedlasting</li></ul>",
         "tiers": [
           { "label": "Fan", "price": 79, "yearlyPrice": 790, "info": "<ul><li>1 skjerm</li></ul>" },
@@ -23,7 +23,7 @@
       },
       {
         "id": "curiosity", "name": "CuriosityStream", "color": "#1a82c4", "initials": "CS", "lastChecked": "2026-04-19",
-        "url": "https://curiositystream.com/", "favicon": "https://curiositystream.com/apple-touch-icon.png",
+        "url": "https://curiositystream.com/", "favicon": "logos/curiosity.png",
         "tiers": [
           { "label": "Standard", "price": 60, "yearlyPrice": 499, "info": "<ul><li>Dokumentarer</li></ul>" },
           { "label": "Smart Bundle", "price": 119, "yearlyPrice": 799, "info": "<ul><li>Dokumentarer</li><li>Tastemade</li><li>Kidstream</li><li>Curiosity University</li><li>SOMM TV</li></ul>" }
@@ -31,7 +31,7 @@
       },
       {
         "id": "disney", "name": "Disney+", "color": "#113ccf", "initials": "D+", "lastChecked": "2026-04-19",
-        "url": "https://www.disneyplus.com/nb-no", "favicon": "https://www.disneyplus.com/favicon.ico",
+        "url": "https://www.disneyplus.com/nb-no", "favicon": "logos/disney.png",
         "tiers": [
           { "label": "Med reklame", "price": 69, "info": "<ul><li>2 skjermer</li><li>1080p</li><li class=\"negative\">Ingen nedlasting</li></ul>" },
           { "label": "Standard", "price": 109, "yearlyPrice": 1090, "info": "<ul><li>2 skjermer</li><li>1080p</li><li>Nedlasting</li></ul>" },
@@ -41,7 +41,7 @@
       {
         "id": "f1tv", "name": "Formel 1", "color": "#e10600", "initials": "F1", "lastChecked": "2026-04-19",
         "url": "https://f1tv.formula1.com/",
-        "favicon": "https://t1.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=http://f1tv.formula1.com&size=128",
+        "favicon": "logos/f1tv.png",
         "currency": "EUR",
         "note": "<p style=\"margin:0\">F1 TV fakturerer i euro. Totalsum konverteres til kroner med gjeldende valutakurs: <span data-eur-rate></span></p>",
         "tiers": [
@@ -57,7 +57,7 @@
       },
       {
         "id": "max", "name": "HBO Max", "color": "#002be7", "initials": "HBO", "lastChecked": "2026-04-19",
-        "url": "https://www.max.com/nb/no", "favicon": "https://t1.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=http://max.com&size=128",
+        "url": "https://www.max.com/nb/no", "favicon": "logos/max.png",
         "tiers": [
           { "label": "Basis med reklame (1080p)", "price": 89, "info": "<ul><li>2 skjermer</li><li>30 nedlastinger</li></ul>" },
           { "label": "Standard (1080p)", "price": 149, "info": "<ul><li>2 skjermer</li><li>30 nedlastinger</li></ul>" },
@@ -68,13 +68,13 @@
       },
       {
         "id": "mubi", "name": "MUBI", "color": "#001d34", "initials": "M", "lastChecked": "2026-04-19",
-        "url": "https://mubi.com/nb", "favicon": "https://mubi.com/apple-touch-icon.png",
+        "url": "https://mubi.com/nb", "favicon": "logos/mubi.png",
         "tiers": [{ "label": "Standard", "price": 129, "yearlyPrice": 1068 }]
       },
       {
         "id": "mygame", "name": "MyGame", "color": "#4caf50", "initials": "MG", "lastChecked": "2026-04-19",
         "url": "https://mygame.no/",
-        "favicon": "https://wpcdn.mygame.no/wp-content/uploads/2025/02/cropped-favicon-mygame-transparent-180x180.png",
+        "favicon": "logos/mygame.png",
         "note": "<p style=\"margin:0\">Streames via TV 2 Play-app (krever ikke eget TV 2 Play-abonnement). Kjøpes på <a href=\"https://play.tv2.no/pakker?swimLane=mygame\" target=\"_blank\" rel=\"noopener\" style=\"color:var(--accent)\">play.tv2.no ↗</a></p>",
         "tiers": [{
           "label": "Standard", "price": 139,
@@ -85,7 +85,7 @@
       },
       {
         "id": "netflix", "name": "Netflix", "color": "#e50914", "initials": "N", "lastChecked": "2026-04-19",
-        "url": "https://www.netflix.com/nb/", "favicon": "https://assets.nflxext.com/us/ffe/siteui/common/icons/nficon2023.ico",
+        "url": "https://www.netflix.com/nb/", "favicon": "logos/netflix.png",
         "tiers": [
           { "label": "Basis (720p)", "price": 99, "info": "<ul><li>1 skjerm</li><li>1 nedlastingsenhet</li></ul>" },
           { "label": "Standard (1080p)", "price": 129, "info": "<ul><li>2 skjermer</li><li>2 nedlastingsenheter</li></ul>" },
@@ -95,7 +95,7 @@
       {
         "id": "nordiskfilm", "name": "Nordisk Film+", "color": "#004a9f", "initials": "NF+", "lastChecked": "2026-04-19",
         "url": "https://nordiskfilmplus.com/",
-        "favicon": "https://nordiskfilmplus.com/apple-touch-icon.png",
+        "favicon": "logos/nordiskfilm.png",
         "infoOnly": true,
         "note": "<p style=\"margin:0\">Ikke tilgjengelig som direkte abonnement i Norge. Fås kun via Strim (Maks-pakken), Altibox-poeng, RiksTV, Telia eller Telenor.</p>",
         "tiers": [{ "label": "Kun via pakke", "price": 0 }]
@@ -103,7 +103,7 @@
       {
         "id": "nrk", "name": "NRK", "color": "#000000", "initials": "NRK", "lastChecked": "2026-04-19",
         "url": "https://tv.nrk.no/",
-        "favicon": "https://static.nrk.no/publisering/kurator-visning/assets/apple-touch-icon.png",
+        "favicon": "logos/nrk.png",
         "tiers": [{
           "label": "Gratis", "price": 0,
           "sports": ["eliteserien", "obos-ligaen", "toppserien", "fotball-vm", "langrenn", "skiskyting", "alpint", "hopp", "ol"],
@@ -113,7 +113,7 @@
       },
       {
         "id": "prime", "name": "Prime Video", "color": "#00a8e1", "initials": "PV", "lastChecked": "2026-04-19",
-        "url": "https://www.primevideo.com/", "favicon": "https://www.primevideo.com/apple-touch-icon.png",
+        "url": "https://www.primevideo.com/", "favicon": "logos/prime.png",
         "tiers": [{
           "label": "Standard", "price": 79,
           "sports": ["premier-league"],
@@ -124,7 +124,7 @@
       },
       {
         "id": "skyshowtime", "name": "SkyShowtime", "color": "#6b2fa0", "initials": "SS", "lastChecked": "2026-04-19",
-        "url": "https://www.skyshowtime.com/no", "favicon": "https://t1.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=http://skyshowtime.com&size=128",
+        "url": "https://www.skyshowtime.com/no", "favicon": "logos/skyshowtime.png",
         "tiers": [
           { "label": "Standard med reklame", "price": 69, "yearlyPrice": 549, "info": "<ul><li>1080p</li><li>1 skjerm</li><li class=\"negative\">Ingen nedlasting</li></ul>" },
           { "label": "Standard", "price": 109, "yearlyPrice": 869, "info": "<ul><li>1080p</li><li>2 skjermer</li><li>30 nedlastinger/mnd</li></ul>" },
@@ -133,7 +133,7 @@
       },
       {
         "id": "tv2", "name": "TV 2 Play", "color": "#d42127", "initials": "TV2", "lastChecked": "2026-04-19",
-        "url": "https://play.tv2.no/", "favicon": "https://play.tv2.no/favicon/apple-touch-icon.png?v=2",
+        "url": "https://play.tv2.no/", "favicon": "logos/tv2.png",
         "tiers": [
           { "label": "Basis", "price": 169, "adPrice": 109, "info": "<ul><li>Film og serier</li><li>Norsk underholdning</li><li>Nyhetskanalen</li></ul>" },
           { "label": "Favoritt", "price": 259, "adPrice": 189, "includes": ["disney"], "sports": ["haandball", "ishockey", "tennis", "sykling", "sjakk", "langrenn", "skiskyting", "alpint", "hopp", "basket", "volleyball", "innebandy", "nations-league", "fotball-vm"], "hideSportSummary": true, "info": "<ul><li>Alt i Basis</li><li>Disney+</li><li>Live-TV og direkte kanaler</li></ul><dl class=\"sport-details\"><dt>Fotball</dt><dd>Fotball-VM 2026 (delt med NRK), UEFA Nations League, privatlandskamper</dd><dt>Andre sporter</dt><dd>Håndball, norsk ishockey, tennis, sykling, sjakk, langrenn, skiskyting, alpint, hopp, basket, volleyball, innebandy</dd></dl>" },
@@ -147,7 +147,7 @@
       },
       {
         "id": "vgpluss", "name": "VG+", "color": "#1e1e1e", "initials": "VG", "lastChecked": "2026-04-19",
-        "url": "https://www.vg.no/vgpluss", "favicon": "https://www.vg.no/gfx/icons/apple-touch-icon-114-precomposed.png",
+        "url": "https://www.vg.no/vgpluss", "favicon": "logos/vgpluss.png",
         "tiers": [
           { "label": "VG+", "price": 99, "info": "<ul><li>Alle VGs artikler</li><li>Serier og dokumentarer fra VGTV</li><li>Del gratis med en i familien</li></ul>" },
           { "label": "VG+ Sport", "price": 159, "info": "<ul><li>Alt i VG+</li><li>Direktesendt sport på VGTV</li></ul>" },
@@ -158,7 +158,7 @@
       },
       {
         "id": "viaplay", "name": "Viaplay", "color": "#be0060", "initials": "VP", "lastChecked": "2026-04-19",
-        "url": "https://viaplay.no/", "favicon": "https://viaplay.no/apple-touch-icon.png",
+        "url": "https://viaplay.no/", "favicon": "logos/viaplay.png",
         "note": "<p style=\"margin:0\">Viaplay nevner enkelte pakker i Q&amp;A og artikler som ikke finnes på prislista (f.eks. «Medium Pluss»). Kun pakkene på prislista er listet her.</p>",
         "tiers": [
           { "label": "Film & Serier med reklame", "price": 109, "info": "<ul><li>Film, serier og barneinnhold</li></ul>" },
@@ -173,7 +173,7 @@
       },
       {
         "id": "youtube", "name": "YouTube Premium", "color": "#ff0000", "initials": "YT", "lastChecked": "2026-04-19",
-        "url": "https://www.youtube.com/premium", "favicon": "https://www.youtube.com/s/desktop/dfbe401e/img/favicon_144x144.png",
+        "url": "https://www.youtube.com/premium", "favicon": "logos/youtube.png",
         "tiers": [{ "label": "Premium", "price": 169 }]
       }
     ]
@@ -183,7 +183,7 @@
     "items": [
       {
         "id": "allente", "name": "Allente", "color": "#e6007e", "initials": "AL", "lastChecked": "2026-04-19",
-        "url": "https://www.allente.no/", "favicon": "https://www.allente.no/Content/Favicons/Allente/apple-touch-icon.png?v=jw62wyrjWy",
+        "url": "https://www.allente.no/", "favicon": "logos/allente.png",
         "tiers": [
           { "label": "Start", "price": 399, "info": "<ul><li>TV-kanaler</li><li>Strømmetjenester</li></ul>" },
           { "label": "Pluss", "price": 499, "info": "<ul><li>Flere TV-kanaler</li><li>Flere strømmetjenester</li></ul>" },
@@ -192,7 +192,7 @@
       },
       {
         "id": "altibox", "name": "Altibox", "color": "#00a651", "initials": "AB", "lastChecked": "2026-04-19",
-        "favicon": "https://www.altibox.no/wp-content/uploads/2016/04/altibox-favicon.png",
+        "favicon": "logos/altibox.png",
         "isBundle": true,
         "linkedInternet": "altibox-internett",
         "regions": [
@@ -270,7 +270,7 @@
       },
       {
         "id": "strim", "name": "Strim", "color": "#00c389", "initials": "S", "lastChecked": "2026-04-19", "addonsLabel": "Tilpass pakke",
-        "url": "https://www.strim.no/", "favicon": "https://www.strim.no/favicon-32x32.png",
+        "url": "https://www.strim.no/", "favicon": "logos/strim.png",
         "note": "<div style=\"font-weight:600;color:var(--text);margin-bottom:0.3rem\">Inkludert i alle pakker:</div><ul><li>TV 2 Play Basis med reklame</li><li><details><summary>13 TV-kanaler</summary><span class=\"channel-list\">TV 2 Direkte, TV 2 Nyheter, TV 2 Zebra, TV 2 Livsstil, TVNorge, REX, FEM, VOX, TV3, TV3+, CNN, BBC News, TV 6</span></details></li></ul>",
         "tiers": [
           { "label": "Smart", "price": 399, "includes": ["tv2"], "info": "<ul><li>Én valgfri streamingtjeneste:<ul class=\"options\"><li>HBO Max Basis med reklame</li><li>Viaplay Film &amp; Serier med reklame</li></ul></li></ul>" },
@@ -294,7 +294,7 @@
     "items": [
       {
         "id": "altibox-internett", "name": "Altibox", "color": "#00a651", "initials": "AB", "lastChecked": "2026-04-19",
-        "url": "https://www.altibox.no/", "favicon": "https://www.altibox.no/wp-content/uploads/2016/04/altibox-favicon.png",
+        "url": "https://www.altibox.no/", "favicon": "logos/altibox.png",
         "linkedBundle": "altibox",
         "tiers": [
           { "label": "150 Mbps", "price": 869, "priceFrom": { "date": "2026-05-01", "price": 919 } },

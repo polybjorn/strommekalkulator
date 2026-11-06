@@ -24,6 +24,8 @@ Pick any combination of services for a monthly and yearly total, and filter by s
 
 Prices live in `data.json`. Each service has a `lastChecked` date that I bump manually when I verify prices; the footer's "Sist oppdatert" label follows the most recent date across all services. Non-NOK prices convert at the EUR/NOK rate the GitHub Pages workflow fetches at each deploy and on the 1st of each month; the committed `exchange-rate.json` is the rate for local runs.
 
+Provider logos are 72x72 PNGs in `logos/`, named after the service id, so the page loads nothing from another host. The validator refuses a `favicon` that is not a file there.
+
 Validate `data.json` before committing (CI runs the same check):
 
 ```sh
