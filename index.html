@@ -1080,41 +1080,22 @@
       z-index: 100;
       display: inline-flex;
       align-items: center;
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 999px;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.15);
-      transition: border-color 0.15s;
-    }
-
-    .sport-filter-wrap:hover,
-    .sport-filter-wrap.active {
-      border-color: var(--accent);
-    }
-
-    .sport-filter-btn {
-      background: none;
-      color: var(--text);
-      border: none;
-      border-radius: 999px;
-      padding: 0.5rem 1rem;
-      font-size: 0.85rem;
-      font-weight: 500;
-      cursor: pointer;
-      display: inline-flex;
-      align-items: center;
       gap: 0.4rem;
     }
 
-    .sport-filter-btn.active {
-      color: var(--accent);
+    /* The button is a ui-chip, pressed while a filter is on; the shadow lifts
+       it off the cards as the old pill did. */
+    .sport-filter-btn,
+    .sport-filter-reset {
+      box-shadow: 0 4px 20px rgba(0,0,0,0.15);
     }
 
     .sport-filter-reset {
-      padding: 0.5rem 1rem 0.5rem 0.6rem;
-      background: none;
+      padding: 0.5rem 1rem;
+      background: var(--surface);
       color: var(--accent);
-      border: none;
+      border: 1px solid var(--border);
+      border-radius: 999px;
       font: inherit;
       font-size: 0.8rem;
       font-weight: 600;
@@ -1130,9 +1111,10 @@
       display: none;
     }
 
+    /* Shown only while the chip is pressed, so it sits on the accent fill. */
     .sport-filter-count {
-      background: var(--accent);
-      color: #fff;
+      background: var(--ui-on-accent);
+      color: var(--ui-accent);
       font-size: 0.75rem;
       font-weight: 700;
       min-width: 1.2em;
@@ -1256,11 +1238,11 @@
     </div>
   </dialog>
   <div class="sport-filter-wrap">
-    <button class="sport-filter-btn" id="sport-filter-btn" title="Filtrer">
+    <button class="ui-chip sport-filter-btn" id="sport-filter-btn" type="button" aria-pressed="false" aria-haspopup="dialog" title="Filtrer">
       <span class="sport-filter-label">Filter</span>
       <span class="sport-filter-count" id="sport-filter-count" hidden>0</span>
     </button>
-    <button class="sport-filter-reset" id="sport-filter-reset" title="Nullstill filter" hidden>Nullstill</button>
+    <button class="sport-filter-reset" id="sport-filter-reset" type="button" title="Nullstill filter" hidden>Nullstill</button>
   </div>
   <div class="total-bar">
     <span class="total-monthly" id="total-monthly">0 kr</span><span class="total-period">/mnd</span>
@@ -2672,8 +2654,7 @@
       const count = document.getElementById('sport-filter-count');
       const reset = document.getElementById('sport-filter-reset');
       const active = sportFilter.size > 0;
-      btn.classList.toggle('active', active);
-      btn.parentElement.classList.toggle('active', active);
+      btn.setAttribute('aria-pressed', String(active));
       if (active) {
         count.textContent = sportFilter.size;
         count.hidden = false;
