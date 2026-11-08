@@ -1,0 +1,1581 @@
+/* ui.css 1.14.0: shared building blocks for menus, modals and forms.
+   Copyright (c) 2026 Bjørn A. Andersen, MIT. From bjorn/ui-foundation; a
+   vendored copy is replaced from a tag there, never edited in place.
+
+   Written to be shared between apps, so it carries no app-specific names.
+   Every class starts with `ui-`, which lets old and new markup coexist.
+   The one exception is .open, a state the host sets on a .ui-collapse.
+
+   Host contract
+   1. Declare the layer order before any other stylesheet, with the host's own
+      layers between the two ui layers:
+        @layer ui-tokens, <vendor>, <app>, ui;
+      The `ui` layer then beats every general rule in the host, whatever its
+      specificity. Unlayered CSS and inline styles still beat it, so a block
+      only gets this guarantee once its markup carries no style= attribute and
+      the host's own rules sit in a layer.
+   2. Map the colours in a host layer. The defaults below are system colours,
+      only good enough to stay legible:
+        --ui-text, --ui-muted, --ui-surface, --ui-control-surface,
+        --ui-border, --ui-accent, --ui-on-accent, --ui-danger,
+        --ui-success, --ui-warning
+      --ui-on-accent is the text on an accent fill. --ui-success colours
+      .ui-badge-success, and --ui-warning is for the host's own status marks
+      and text; like --ui-danger they stay legible as text.
+   3. Override any size token in a host layer. The names are shared; the
+      values are per app. Each scale is a short list for the host's own CSS
+      to move onto, as well as what the blocks use:
+        type      --ui-text-xs to --ui-text-xl; the defaults start at 0.75rem
+        spacing   --ui-space-1 to --ui-space-8
+        radius    --ui-radius-sm, --ui-radius, --ui-radius-lg, --ui-radius-xl,
+                  --ui-radius-full
+        motion    --ui-duration-fast, -base, -slow
+        stacking  --ui-z-raised, -sticky, -dropdown, -modal, -popover, -toast,
+                  in that order from the page up
+        dialog    --ui-dialog-width, --ui-dialog-max-height,
+                  --ui-dialog-border, --ui-backdrop, --ui-shadow; a host sets
+                  --ui-dialog-width or --ui-dialog-max-height on a dialog's own
+                  class to size that one. --ui-dialog-border draws the frame
+                  and the lines around the head and actions, and follows
+                  --ui-border until a host maps it, because a control's border
+                  has to stand out against its surface and a frame does not.
+                  The bottom bar draws its top edge with it too
+        sheet     --ui-sheet-width caps a sheet on a wide screen, and
+                  --ui-radius-xl rounds its top corners. --ui-corner-gap is
+                  how far a sheet's or full-screen view's actions, and the
+                  bottom bar's items, sit from the screen's side and bottom
+                  edges, clear of a rounded display corner; it is in px and
+                  stays off the spacing scale, since a display corner does not
+                  shrink with a denser app. A host's own last row in a sheet
+                  or full-screen view reads it too
+        bar       --ui-bottom-bar-height, --ui-bottom-bar-display; the
+                  height is the items' row, and the bar adds its corner gap
+                  below it (see the bottom bar contract).
+                  --ui-bottom-bar-space is its full height, flat, and
+                  --ui-bottom-bar-float-space the same for a floating bar;
+                  the toast reads --ui-bottom-bar-space. The bar shows
+                  while --ui-bottom-bar-display is flex, so a host sets
+                  it to none in its own media query wherever the bar should
+                  not show, since a display: none from the host would lose to
+                  the ui layer
+        focus     --ui-focus-width, --ui-focus-color; the ring every
+                  control draws when it takes keyboard focus. The colour
+                  follows --ui-accent until a host maps it
+        touch     --ui-touch-target, the smallest height a control takes
+                  under a coarse pointer. 3rem meets Android's 48dp and
+                  Apple's 44pt
+
+   Markup contract: classes and plain HTML only, with no on*= or style=
+   attributes, so a page with a strict CSP can use it. specimen.html in
+   bjorn/ui-foundation has the markup for every block, in each of its states.
+   Two classes carry a state: .ui-field-invalid on a field, with
+   aria-invalid="true" on its control, shows an error and turns a .ui-hint
+   inside it into the error text; .ui-required on a label marks a field that
+   must be filled in.
+
+   Error hint contract: .ui-hint-error on a .ui-hint draws it in the danger
+   colour on its own, for an error that belongs to no single field, such as
+   a failed save or a form-wide check. An error about one control is a
+   .ui-field-invalid instead, which also marks the control. The words say it
+   is an error, since forced colours draw every hint alike. A hint that
+   appears when something fails takes role="alert" and follows the banner's
+   rule: the empty element is in the page first and the host fills it.
+
+   Icon button contract: .ui-button-icon on a .ui-button, with any of its
+   looks, makes it a square that holds one icon as an
+   <svg aria-hidden="true">, with an aria-label on the button for its name.
+   .ui-button-icon-round makes the square a circle. A colour on hover, such
+   as danger on a delete, stays in the host.
+
+   List contract: a .ui-list-item is a bordered row on an <li>, an <a> or a
+   <button>: an <li> is static, an <a> goes to a place, a <button> acts and
+   may show aria-pressed="true" for the chosen one. Its text goes in a
+   .ui-list-item-main, which shrinks and wraps, and an optional
+   .ui-list-item-end after it holds a badge, a figure or an action. A row that
+   is itself a link or button holds no second control, so a trailing action
+   sits on an <li>. Hover and pressed draw the accent line, and only on an <a>
+   or <button>. A .ui-list-head is the small uppercase label over a group of
+   rows, on whatever element fits, a heading or a <p>. Space between rows and
+   around a head stays in the host, as does a status stripe on a row.
+
+   Dialog contract: open a .ui-dialog with showModal(), never show() or the
+   open attribute, because only showModal() gives the top layer and an inert
+   page behind. Opening and closing stay the host's code; autofocus on a
+   control decides where focus lands, and without it the first focusable
+   element takes it. The top layer covers everything outside the dialog, so a
+   popover or menu opened from a dialog must mount inside it, with
+   position: fixed so the scrolling body does not clip it. A <form> that holds
+   the body and the actions can sit directly inside the dialog. A
+   .ui-dialog-close is a .ui-button-quiet with an aria-label, holding the
+   Lucide x icon as an <svg aria-hidden="true">.
+   .ui-dialog-sheet, .ui-dialog-top and .ui-dialog-fullscreen change where a
+   dialog sits and
+   nothing about how it opens or closes, so a host picks one per screen size
+   when it opens the dialog.
+
+   Bottom bar contract: the bar sets no position. A host puts it where the
+   layout ends, in the flow below a full-height column or fixed to the
+   bottom from its own layer, and reserves its full height for it:
+   --ui-bottom-bar-height plus the gap below the items, which is
+   max(--ui-corner-gap, the bottom safe-area inset). The gap sits outside
+   --ui-bottom-bar-height because the items' content nearly fills it.
+   aria-current="page" marks the item for the screen in view.
+   .ui-bottom-bar-float lifts the bar off the screen edges by --ui-space-3,
+   plus the safe area below it; content may run behind it, and a host that
+   keeps something clear of it reserves the bar height and twice the gap.
+
+   Toast contract: a .ui-toast is fixed and centred near the bottom edge,
+   above the bottom bar, and the host's script shows and hides it by toggling
+   hidden, as it does a menu; ui.js does not. Showing it plays a short entry
+   animation, which reduced motion drops. It is a live region, so it carries
+   role="status" and is in the page, hidden and empty, before its text is
+   set; a toast added to the page already holding its text is often not
+   announced. A toast that holds an action, such as a prompt to reload for an
+   update, must not time out, since a timer would take the action away from
+   whoever has not reached it yet; the host dismisses it when the action is
+   taken or declined. A toast with text only may time out, and that timer is
+   the host's. Its bottom edge sits --ui-space-3 above the bar, using
+   --ui-bottom-bar-space. A host with a floating bar sets
+   --ui-bottom-bar-space: var(--ui-bottom-bar-float-space) in its own layer,
+   and one with no bar, or none at a breakpoint, sets it to 0px, where the
+   toast clears --ui-corner-gap and the bottom safe area itself. Its width
+   stays --ui-corner-gap inside each side of the viewport, or the safe area
+   where that is larger.
+
+   Menu contract: a .ui-menu-anchor holds a trigger and its .ui-menu or
+   .ui-popover, which opens below it, at the start edge or with
+   .ui-menu-end or .ui-menu-center. The anchor must not stretch to its row's
+   height, or the menu opens under the row. A closed menu carries hidden.
+   An action menu follows the menu-button pattern: the trigger has
+   aria-haspopup="menu", aria-expanded and aria-controls, the menu has
+   role="menu", and each .ui-menu-item has role="menuitem",
+   "menuitemcheckbox" or "menuitemradio", with aria-checked on the last two.
+   A listbox has role="listbox" with option items and aria-selected. A
+   .ui-popover holds a form or text, and its trigger has no aria-haspopup.
+   .ui-menu-at opens a menu at a point, for a context menu, at
+   --ui-menu-x and --ui-menu-y; a menu inside a dialog uses it too, placed
+   from its trigger's box, so the dialog's scrolling body does not clip it.
+   Opening, closing, focus and placing a .ui-menu-at are script work:
+   ui.js does it from this markup, and an app with its own script keeps to
+   the same contract.
+
+   Tabs contract: a .ui-tabs row holds .ui-tab links or buttons that switch a
+   route or a view, and marks the one in view: aria-current="page" on a link,
+   as the bottom bar does, or aria-pressed="true" on a button. The row scrolls
+   sideways when its tabs do not fit, and a tab's label never wraps. That is
+   all it does: an app that shows panels in place gives the row
+   role="tablist", each tab role="tab" with aria-selected and aria-controls,
+   and each panel role="tabpanel", and writes the arrow-key focus itself,
+   since ui.js does not. aria-selected="true" draws the same mark, so the
+   look holds when an app adds those roles.
+
+   Collapse contract: a .ui-disclosure on <details>, with a <summary> as its
+   first child, is the default for a section that opens and closes, since it
+   needs no script and the browser keeps its state and keyboard handling.
+   .ui-collapse is for when app state drives the panel, such as one opened
+   from elsewhere on the page or kept in step with other panels: the host's
+   script toggles .open on it, and its trigger is a button with
+   aria-expanded and aria-controls naming the .ui-collapse. Its one child is
+   a .ui-collapse-body.
+
+   Chip, badge and dot contract: a .ui-chip is a <button> that shows its
+   pressed state from aria-pressed="true", never from a class, so a screen
+   reader hears what the fill shows; flipping it is the host's code. A
+   .ui-badge is a static label with no state of its own. .ui-badge-pill
+   rounds its ends, and .ui-badge-success draws its text and line in
+   --ui-success, for a label that marks something current or done; its
+   words carry that, never the colour alone. A .ui-dot takes its
+   colour from --ui-dot-color, set by the host on the dot or an ancestor, and
+   falls back to --ui-muted. Colour alone carries nothing to a screen reader
+   or in forced colours, where every dot draws in the text colour, so the
+   state a dot marks needs text beside it or an aria-label on it with
+   role="img". Any animation on these, such as a pulse on a change, stays in
+   the host.
+
+   Search contract: a .ui-search is a <form> inside a .ui-field that holds
+   one <input type="search"> with a placeholder, then a .ui-search-clear
+   <button type="reset"> on a .ui-button-quiet with an aria-label, holding
+   the Lucide x icon as an <svg aria-hidden="true">. The reset clears the
+   field with no script, back to its value attribute, so the input
+   carries none and a starting value is set from script. A reset fires no
+   input event, and the button hides once the field is empty, so focus falls
+   back to the page. ui.js covers both: the field fires input once it has
+   cleared, and the clear button leaves focus in the field. Without ui.js, a
+   live filter also listens for reset on the form and reads the query as
+   empty there, since the field clears after that event, and moves focus
+   itself. Enter
+   submits the form: the host handles submit, or, outside a dialog, the form
+   takes method="dialog", where a submit does nothing.
+
+   Banner contract: a .ui-banner is a notice in the page's flow, with its
+   words in a .ui-banner-text and, optionally, one .ui-button after them that
+   wraps below on a narrow screen. .ui-banner-warn marks one the reader
+   should act on. It draws a heavier start edge in --ui-warning on the same
+   surface and text colours, so contrast never depends on the warning colour,
+   and the words carry the severity because forced colours draw every edge
+   alike. When a banner shows stays with the host. A passive notice has
+   role="status" and one that blocks has role="alert". Either is announced
+   only when its text changes inside an element already in the page, so the
+   host renders the empty element first and fills it, rather than inserting
+   a banner that already holds its text.
+
+   Empty contract: a .ui-empty stands in for content that loaded and has
+   nothing to show, such as a list with no items or a search with no match.
+   Its text is the muted line, an optional .ui-empty-title above it names
+   what is missing, and an optional .ui-empty-action holds the one control
+   that fills it. It is not for the other two states: a region still loading
+   keeps its content and carries aria-busy="true" on itself, and a failure
+   uses the danger text of a .ui-hint or a banner, since an app that draws
+   all three with one class cannot tell a screen reader, or a later restyle,
+   which one it meant. The block keeps no icon or illustration; a host puts
+   its own above the title.
+
+   Live region contract: a screen reader hears a change only inside a live
+   region, so a .ui-banner takes role="status", or role="alert" when it
+   blocks, a .ui-toast takes role="status", and so does a .ui-empty, so a
+   list that empties after a search or a filter is heard. A live region is
+   announced when its text changes, not when it arrives already holding
+   text, so the element is in the page, hidden or empty, before the host
+   sets that text. A region that is loading carries aria-busy="true" until
+   it is filled, with a role="status" line, such as a .ui-hint, that says
+   what is loading; ui.css has no busy block, since a spinner tells a screen
+   reader nothing.
+
+   Sheet handle contract: a .ui-dialog-handle as a sheet's first child shows
+   that the sheet drags shut. It only draws, so a host adds it where its own
+   code closes the sheet on a downward drag. */
+
+@layer ui-tokens {
+  :root {
+    --ui-space-1: 0.25rem;
+    --ui-space-2: 0.5rem;
+    --ui-space-3: 0.75rem;
+    --ui-space-4: 1rem;
+    --ui-space-5: 1.5rem;
+    --ui-space-6: 2rem;
+    --ui-space-7: 3rem;
+    --ui-space-8: 4rem;
+
+    --ui-text-xs: 0.75rem;
+    --ui-text-sm: 0.85rem;
+    --ui-text-md: 1rem;
+    --ui-text-lg: 1.15rem;
+    --ui-text-xl: 1.4rem;
+
+    --ui-text-weight: 400;
+    --ui-label-weight: 500;
+    --ui-control-height: 2.25rem;
+    --ui-radius-sm: 4px;
+    --ui-radius: 6px;
+    --ui-radius-lg: 8px;
+    --ui-radius-xl: 28px;
+    --ui-radius-full: 999px;
+
+    --ui-duration-fast: 150ms;
+    --ui-duration-base: 200ms;
+    --ui-duration-slow: 250ms;
+
+    --ui-z-raised: 1;
+    --ui-z-sticky: 100;
+    --ui-z-dropdown: 1000;
+    --ui-z-modal: 2000;
+    --ui-z-popover: 3000;
+    --ui-z-toast: 5000;
+
+    --ui-dialog-width: 28rem;
+    --ui-dialog-max-height: calc(100% - 2 * var(--ui-space-4));
+    --ui-dialog-border: var(--ui-border);
+    --ui-backdrop: rgb(0 0 0 / 50%);
+    --ui-shadow: 0 10px 40px rgb(0 0 0 / 30%);
+    --ui-sheet-width: 40rem;
+    --ui-corner-gap: 24px;
+
+    --ui-bottom-bar-height: 3.5rem;
+    --ui-bottom-bar-display: flex;
+    --ui-bottom-bar-space: calc(var(--ui-bottom-bar-height)
+      + max(var(--ui-corner-gap), env(safe-area-inset-bottom, 0px)));
+    --ui-bottom-bar-float-space: calc(var(--ui-bottom-bar-height)
+      + var(--ui-space-3) * 2 + env(safe-area-inset-bottom, 0px));
+    --ui-touch-target: 3rem;
+    --ui-focus-width: 2px;
+    --ui-focus-color: var(--ui-accent);
+
+    --ui-text: CanvasText;
+    --ui-muted: GrayText;
+    --ui-surface: Canvas;
+    --ui-control-surface: Canvas;
+    --ui-border: GrayText;
+    --ui-accent: LinkText;
+    --ui-on-accent: Canvas;
+    --ui-danger: #c62828;
+    --ui-success: #2e7d32;
+    --ui-warning: #a15c00;
+  }
+}
+
+@layer ui {
+  .ui-section {
+    font: inherit;
+    display: grid;
+    gap: var(--ui-space-3);
+    min-inline-size: 0;
+    margin: 0;
+    padding: 0;
+    border: 0;
+  }
+  .ui-section + .ui-section { margin-block-start: var(--ui-space-5); }
+
+  /* A legend is placed on the fieldset border unless it floats. */
+  .ui-section-title {
+    font: inherit;
+    float: left;
+    inline-size: 100%;
+    margin: 0;
+    padding: 0;
+    font-size: var(--ui-text-xs);
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--ui-muted);
+  }
+
+  .ui-field {
+    font: inherit;
+    display: grid;
+    gap: var(--ui-space-1);
+    min-inline-size: 0;
+    margin: 0;
+  }
+  .ui-field-label {
+    font: inherit;
+    display: block;
+    margin: 0;
+    padding: 0;
+    font-size: var(--ui-text-sm);
+    font-weight: var(--ui-label-weight);
+    color: var(--ui-text);
+  }
+  /* :where keeps this at the weight of the field rules below, which override it.
+     border-box keeps a full-width control inside its field on a host with no
+     box-sizing reset. */
+  .ui-field :is(input:where(:not([type="checkbox"], [type="radio"], [type="range"], [type="color"], [type="file"])), select, textarea) {
+    font: inherit;
+    box-sizing: border-box;
+    inline-size: 100%;
+    min-block-size: var(--ui-control-height);
+    margin: 0;
+    padding: var(--ui-space-1) var(--ui-space-3);
+    font-size: var(--ui-text-sm);
+    color: var(--ui-text);
+    background-color: var(--ui-control-surface);
+    border: 1px solid var(--ui-border);
+    border-radius: var(--ui-radius);
+  }
+  /* The first line sits where a one-line input centres its text, so the
+     caret keeps its height moving between fields. */
+  .ui-field textarea {
+    padding-block: calc((var(--ui-control-height) - 1lh) / 2 - 1px);
+    resize: vertical;
+  }
+  /* Browsers default to one fixed grey, whatever the surface behind it. */
+  .ui-field ::placeholder {
+    color: var(--ui-muted);
+    opacity: 1;
+  }
+
+  /* Two gradients, so the chevron follows --ui-muted in every theme. */
+  .ui-field select:not([multiple]) {
+    appearance: none;
+    padding-inline-end: var(--ui-space-6);
+    background-image:
+      linear-gradient(45deg, transparent 50%, var(--ui-muted) 50%),
+      linear-gradient(135deg, var(--ui-muted) 50%, transparent 50%);
+    background-position: right 1.05rem center, right 0.75rem center;
+    background-size: 6px 6px;
+    background-repeat: no-repeat;
+  }
+  /* Drawn inside the box, since a reveal clips whatever sticks out of it. */
+  .ui-field :is(input, select, textarea):focus-visible {
+    outline: var(--ui-focus-width) solid var(--ui-focus-color);
+    outline-offset: calc(-1 * var(--ui-focus-width));
+  }
+  .ui-field-invalid :is(input, select, textarea) { border-color: var(--ui-danger); }
+  .ui-field :is(input, select, textarea):disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+  .ui-field:has(:is(input, select, textarea):disabled) .ui-field-label { color: var(--ui-muted); }
+  .ui-field-invalid .ui-hint { color: var(--ui-danger); }
+
+  .ui-field-row {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--ui-space-2);
+    min-inline-size: 0;
+  }
+
+  .ui-control-row {
+    display: flex;
+    align-items: center;
+    gap: var(--ui-space-3);
+    min-inline-size: 0;
+    min-block-size: var(--ui-control-height);
+  }
+  .ui-control-row > :is(button, .ui-button) { flex: none; }
+  .ui-field .ui-control-row > input { flex: 1; inline-size: auto; min-inline-size: 0; }
+  .ui-control-text {
+    min-inline-size: 0;
+    overflow: hidden;
+    font-size: var(--ui-text-sm);
+    color: var(--ui-muted);
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  a.ui-control-text { text-decoration: underline; }
+
+  .ui-required::after {
+    content: " *";
+    color: var(--ui-muted);
+  }
+
+  .ui-hint {
+    font: inherit;
+    margin: 0;
+    padding: 0;
+    font-size: var(--ui-text-xs);
+    font-weight: var(--ui-text-weight);
+    letter-spacing: normal;
+    text-transform: none;
+    color: var(--ui-muted);
+  }
+  /* After .ui-hint, which it overrides at the same specificity. */
+  .ui-hint-error { color: var(--ui-danger); }
+
+  /* Muted and centred so it reads as an absence, not as content. The gap and
+     padding come off the spacing scale, so a dense app tightens it. */
+  .ui-empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--ui-space-2);
+    box-sizing: border-box;
+    min-inline-size: 0;
+    margin: 0;
+    padding: var(--ui-space-6) var(--ui-space-4);
+    font-size: var(--ui-text-sm);
+    color: var(--ui-muted);
+    text-align: center;
+    overflow-wrap: anywhere;
+  }
+  .ui-empty > :where(p) { margin: 0; }
+  .ui-empty-title {
+    font-size: var(--ui-text-md);
+    font-weight: var(--ui-label-weight);
+    color: var(--ui-text);
+  }
+  .ui-empty-action { margin-block-start: var(--ui-space-2); }
+
+  .ui-toggle-row {
+    font: inherit;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--ui-space-3);
+    min-block-size: var(--ui-control-height);
+    margin: 0;
+    padding: 0;
+    font-size: var(--ui-text-sm);
+    color: var(--ui-text);
+    cursor: pointer;
+  }
+  /* accent-color only reaches the checked state, so the box is drawn to theme
+     the unchecked one too. */
+  .ui-check {
+    appearance: none;
+    box-sizing: border-box;
+    position: relative;
+    flex: none;
+    inline-size: 16px;
+    block-size: 16px;
+    margin: 0;
+    background: var(--ui-control-surface);
+    border: 1px solid var(--ui-muted);
+    border-radius: var(--ui-radius-sm);
+    cursor: pointer;
+  }
+  .ui-check:checked {
+    background: var(--ui-accent);
+    border-color: var(--ui-accent);
+  }
+  .ui-check:checked::after {
+    content: '';
+    position: absolute;
+    inset-block-start: 1px;
+    inset-inline-start: 4px;
+    inline-size: 4px;
+    block-size: 8px;
+    border: solid var(--ui-surface);
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+  }
+  .ui-check:focus-visible {
+    outline: var(--ui-focus-width) solid var(--ui-focus-color);
+    outline-offset: var(--ui-focus-width);
+  }
+
+  .ui-toggle-text {
+    display: grid;
+    gap: var(--ui-space-1);
+    min-inline-size: 0;
+  }
+  .ui-toggle-row > input[type="checkbox"] {
+    appearance: none;
+    box-sizing: border-box;
+    position: relative;
+    inline-size: 36px;
+    block-size: 20px;
+    background: transparent;
+    border: 1px solid var(--ui-muted);
+    border-radius: var(--ui-radius-full);
+    cursor: pointer;
+    transition: background var(--ui-duration-fast), border-color var(--ui-duration-fast);
+  }
+  .ui-toggle-row > input[type="checkbox"]::after {
+    content: '';
+    position: absolute;
+    inset-block-start: 1px;
+    inset-inline-start: 1px;
+    inline-size: 16px;
+    block-size: 16px;
+    background: var(--ui-muted);
+    border-radius: 50%;
+    transition: transform var(--ui-duration-fast), background var(--ui-duration-fast);
+  }
+  .ui-toggle-row > input[type="checkbox"]:checked {
+    background: var(--ui-accent);
+    border-color: var(--ui-accent);
+  }
+  .ui-toggle-row > input[type="checkbox"]:checked::after {
+    background: var(--ui-surface);
+    transform: translateX(16px);
+  }
+
+  .ui-choice-list {
+    font: inherit;
+    display: grid;
+    gap: var(--ui-space-1);
+    min-inline-size: 0;
+    margin: 0;
+    padding: 0;
+    border: 0;
+  }
+  .ui-choice-list > legend {
+    float: left;
+    inline-size: 100%;
+    margin-block-end: var(--ui-space-1);
+  }
+  .ui-choice {
+    font: inherit;
+    display: flex;
+    align-items: center;
+    gap: var(--ui-space-2);
+    min-block-size: var(--ui-control-height);
+    margin: 0;
+    padding: 0;
+    font-size: var(--ui-text-sm);
+    color: var(--ui-text);
+    cursor: pointer;
+  }
+
+  :is(.ui-toggle-row, .ui-choice) > input {
+    flex: none;
+    margin: 0;
+    accent-color: var(--ui-accent);
+  }
+  :is(.ui-toggle-row, .ui-choice) > input:focus-visible {
+    outline: var(--ui-focus-width) solid var(--ui-focus-color);
+    outline-offset: var(--ui-focus-width);
+  }
+
+  /* Segmented and pill choice lists draw each option as a button-like label
+     over its radio. The radio is see-through rather than gone, so it stays in
+     the accessibility tree, takes focus and keeps the browser's own arrow
+     keys. The label can only follow its radio's state through :has(), so a
+     browser without it, such as a WebView before Chrome 105, keeps the
+     ordinary list with visible radios. */
+  @supports selector(:has(*)) {
+    .ui-choice-segmented,
+    .ui-choice-pills {
+      display: flex;
+      flex-wrap: wrap;
+    }
+    .ui-choice-segmented { gap: 0; }
+    .ui-choice-pills { gap: var(--ui-space-2); }
+    :is(.ui-choice-segmented, .ui-choice-pills) > .ui-choice {
+      position: relative;
+      box-sizing: border-box;
+      justify-content: center;
+      min-inline-size: 0;
+      padding: var(--ui-space-1) var(--ui-space-3);
+      text-align: center;
+      overflow-wrap: anywhere;
+      background: var(--ui-control-surface);
+      border: 1px solid var(--ui-border);
+    }
+    .ui-choice-segmented > .ui-choice { flex: 1 1 0; }
+    .ui-choice-segmented > .ui-choice + .ui-choice { border-inline-start-width: 0; }
+    .ui-choice-segmented > .ui-choice:first-of-type {
+      border-start-start-radius: var(--ui-radius);
+      border-end-start-radius: var(--ui-radius);
+    }
+    .ui-choice-segmented > .ui-choice:last-of-type {
+      border-start-end-radius: var(--ui-radius);
+      border-end-end-radius: var(--ui-radius);
+    }
+    .ui-choice-pills > .ui-choice { border-radius: var(--ui-radius-full); }
+    :is(.ui-choice-segmented, .ui-choice-pills) > .ui-choice > input {
+      position: absolute;
+      inset: 0;
+      inline-size: 100%;
+      block-size: 100%;
+      opacity: 0;
+      cursor: inherit;
+    }
+    :is(.ui-choice-segmented, .ui-choice-pills) > .ui-choice:has(> input:checked) {
+      color: var(--ui-on-accent);
+      background: var(--ui-accent);
+      border-color: var(--ui-accent);
+    }
+    :is(.ui-choice-segmented, .ui-choice-pills) > .ui-choice:has(> input[aria-invalid="true"]) {
+      border-color: var(--ui-danger);
+    }
+    :is(.ui-choice-segmented, .ui-choice-pills) > .ui-choice:has(> input:focus-visible) {
+      z-index: var(--ui-z-raised);
+      outline: var(--ui-focus-width) solid var(--ui-focus-color);
+      outline-offset: var(--ui-focus-width);
+    }
+  }
+
+  /* A disclosure is a native <details>, which opens and closes without
+     script. The browser's own marker sits at the start and points a
+     different way per engine, so it goes and a chevron at the end takes its
+     place: down when closed, up when open, the same in either writing
+     direction. Drawn from two borders in currentColor, so forced colours keep
+     it. */
+  .ui-disclosure { display: block; }
+  .ui-disclosure > summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--ui-space-2);
+    box-sizing: border-box;
+    min-block-size: var(--ui-control-height);
+    padding: var(--ui-space-1) 0;
+    font-size: var(--ui-text-sm);
+    font-weight: var(--ui-label-weight);
+    color: var(--ui-text);
+    overflow-wrap: anywhere;
+    cursor: pointer;
+    list-style: none;
+    border-radius: var(--ui-radius-sm);
+  }
+  .ui-disclosure > summary::-webkit-details-marker { display: none; }
+  .ui-disclosure > summary::after {
+    content: "";
+    flex: none;
+    inline-size: 0.45em;
+    block-size: 0.45em;
+    margin-inline: var(--ui-space-1);
+    color: var(--ui-muted);
+    border: solid currentColor;
+    border-width: 0 2px 2px 0;
+    transform: translateY(-25%) rotate(45deg);
+    transition: transform var(--ui-duration-fast);
+  }
+  .ui-disclosure[open] > summary::after { transform: translateY(25%) rotate(225deg); }
+  .ui-disclosure[open] > summary { margin-block-end: var(--ui-space-2); }
+  .ui-disclosure > summary:focus-visible {
+    outline: var(--ui-focus-width) solid var(--ui-focus-color);
+    outline-offset: var(--ui-focus-width);
+  }
+
+  /* A collapse opens when the host's script adds .open, for a panel that app
+     state drives. Rows from 0fr to 1fr animate to the content's own height
+     with no measuring; a browser without grid-template-rows interpolation,
+     such as a WebView before Chrome 107, opens it at once. The body is hidden
+     while closed, which takes its controls out of the tab order, and the
+     visibility transition keeps it shown until the closing animation ends.
+     The body carries no padding or border, which 0fr cannot hide; spacing
+     goes on an element inside it. */
+  .ui-collapse {
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows var(--ui-duration-slow) ease;
+  }
+  .ui-collapse.open { grid-template-rows: 1fr; }
+  .ui-collapse-body {
+    min-block-size: 0;
+    overflow: hidden;
+    visibility: hidden;
+    transition: visibility var(--ui-duration-slow);
+  }
+  .ui-collapse.open > .ui-collapse-body { visibility: visible; }
+
+  /* appearance: none takes the browser's own disabled look away, so the
+     controls and their rows draw it here. */
+  .ui-check:disabled,
+  :is(.ui-toggle-row, .ui-choice):has(> input:disabled) {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+  :is(.ui-toggle-row, .ui-choice) > input:disabled { cursor: not-allowed; }
+
+  /* Hover draws a ring instead of changing the fill or opacity, either of
+     which would take the label below its contrast floor on some hosts. */
+  .ui-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--ui-space-2);
+    box-sizing: border-box;
+    min-block-size: var(--ui-control-height);
+    margin: 0;
+    padding: var(--ui-space-1) var(--ui-space-3);
+    font: inherit;
+    font-size: var(--ui-text-sm);
+    font-weight: var(--ui-label-weight);
+    color: var(--ui-text);
+    text-decoration: none;
+    cursor: pointer;
+    background: transparent;
+    border: 1px solid var(--ui-border);
+    border-radius: var(--ui-radius);
+    transition: box-shadow var(--ui-duration-fast), color var(--ui-duration-fast);
+  }
+  .ui-button-primary {
+    color: var(--ui-on-accent);
+    background: var(--ui-accent);
+    border-color: var(--ui-accent);
+  }
+  .ui-button-danger {
+    color: var(--ui-danger);
+    border-color: var(--ui-danger);
+  }
+  .ui-button-quiet {
+    color: var(--ui-muted);
+    border-color: transparent;
+  }
+  .ui-button:where(:not(:disabled, [aria-disabled="true"])):hover {
+    box-shadow: inset 0 0 0 1px currentColor;
+  }
+  .ui-button-quiet:where(:not(:disabled, [aria-disabled="true"])):hover {
+    color: var(--ui-text);
+    box-shadow: none;
+  }
+  .ui-button:focus-visible {
+    outline: var(--ui-focus-width) solid var(--ui-focus-color);
+    outline-offset: var(--ui-focus-width);
+  }
+  /* A link has no disabled state of its own, so it takes aria-disabled and
+     loses its href. */
+  .ui-button:is(:disabled, [aria-disabled="true"]) {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+  /* An icon button is square, as tall as any control, and holds one icon.
+     It changes the shape only, so it sits on any button look, quiet or
+     bordered, and keeps that look's states. */
+  .ui-button-icon {
+    flex: none;
+    inline-size: var(--ui-control-height);
+    padding: 0;
+  }
+  .ui-button-icon-round { border-radius: var(--ui-radius-full); }
+
+  /* The browser's own clear button exists only in Chromium and WebKit, so it
+     goes, and every engine draws the reset button instead. It shows while
+     there is text to clear, read from :placeholder-shown, which is why the
+     input needs a placeholder. These rules sit below the button's so they
+     win on source order. */
+  .ui-search {
+    position: relative;
+    min-inline-size: 0;
+    margin: 0;
+  }
+  .ui-control-row > .ui-search { flex: 1; }
+  .ui-field .ui-search > input {
+    appearance: none;
+    padding-inline-end: var(--ui-control-height);
+  }
+  .ui-search > input::-webkit-search-cancel-button { appearance: none; }
+  .ui-search-clear {
+    position: absolute;
+    inset-block: 0;
+    inset-inline-end: 0;
+    inline-size: var(--ui-control-height);
+    padding: 0;
+  }
+  .ui-search-clear:focus-visible { outline-offset: calc(-1 * var(--ui-focus-width)); }
+  .ui-search > input:is(:placeholder-shown, :disabled) + .ui-search-clear { display: none; }
+
+  /* A chip is a toggle on a <button>, shaped as a pill so a row of them reads
+     apart from a row of actions. Pressed takes the accent fill, the same pair
+     a primary button uses, so both states sit on colours tools/contrast.py
+     measures. Hover draws a ring, as on a button. */
+  .ui-chip {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--ui-space-1);
+    box-sizing: border-box;
+    min-inline-size: 0;
+    margin: 0;
+    padding: var(--ui-space-1) var(--ui-space-3);
+    font: inherit;
+    font-size: var(--ui-text-sm);
+    font-weight: var(--ui-label-weight);
+    color: var(--ui-text);
+    overflow-wrap: anywhere;
+    cursor: pointer;
+    background: var(--ui-control-surface);
+    border: 1px solid var(--ui-border);
+    border-radius: var(--ui-radius-full);
+  }
+  .ui-chip[aria-pressed="true"] {
+    color: var(--ui-on-accent);
+    background: var(--ui-accent);
+    border-color: var(--ui-accent);
+  }
+  .ui-chip:where(:not(:disabled, [aria-disabled="true"])):hover {
+    box-shadow: inset 0 0 0 1px currentColor;
+  }
+  .ui-chip:focus-visible {
+    outline: var(--ui-focus-width) solid var(--ui-focus-color);
+    outline-offset: var(--ui-focus-width);
+  }
+  .ui-chip:is(:disabled, [aria-disabled="true"]) {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  /* A badge is a static label beside a row or a control, with no state and
+     no hover, so it never looks pressable. */
+  .ui-badge {
+    display: inline-flex;
+    align-items: center;
+    box-sizing: border-box;
+    min-inline-size: 0;
+    margin: 0;
+    padding: 0 var(--ui-space-2);
+    font-size: var(--ui-text-xs);
+    font-weight: var(--ui-label-weight);
+    color: var(--ui-muted);
+    overflow-wrap: anywhere;
+    vertical-align: middle;
+    border: 1px solid var(--ui-border);
+    border-radius: var(--ui-radius);
+  }
+  .ui-badge-pill { border-radius: var(--ui-radius-full); }
+  .ui-badge-success {
+    color: var(--ui-success);
+    border-color: var(--ui-success);
+  }
+
+  /* A row is one bordered box with its text and an optional trailing cell, so
+     the same markup serves a static entry, a link and a pick. Only a link or
+     a button reacts, so a plain row never looks pressable. A button is
+     stretched to the width a block row has, and the aria-pressed fill is a
+     tint of the accent that keeps --ui-text on --ui-surface readable. */
+  .ui-list-item {
+    display: flex;
+    align-items: center;
+    gap: var(--ui-space-3);
+    box-sizing: border-box;
+    inline-size: 100%;
+    min-inline-size: 0;
+    margin: 0;
+    padding: var(--ui-space-2) var(--ui-space-3);
+    font: inherit;
+    font-size: var(--ui-text-sm);
+    text-align: start;
+    text-decoration: none;
+    list-style: none;
+    color: var(--ui-text);
+    background: var(--ui-surface);
+    border: 1px solid var(--ui-border);
+    border-radius: var(--ui-radius);
+  }
+  .ui-list-item-main {
+    flex: 1;
+    min-inline-size: 0;
+    overflow-wrap: anywhere;
+  }
+  .ui-list-item-end { flex: none; }
+  :is(a, button).ui-list-item { cursor: pointer; }
+  :is(a, button).ui-list-item:where(:not(:disabled, [aria-disabled="true"])):hover { border-color: var(--ui-accent); }
+  :is(a, button).ui-list-item:focus-visible {
+    outline: var(--ui-focus-width) solid var(--ui-focus-color);
+    outline-offset: var(--ui-focus-width);
+  }
+  .ui-list-item[aria-pressed="true"] {
+    background: color-mix(in srgb, var(--ui-accent) 12%, var(--ui-surface));
+    border-color: var(--ui-accent);
+  }
+  .ui-list-item:is(:disabled, [aria-disabled="true"]) {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  .ui-list-head {
+    margin: 0;
+    font-size: var(--ui-text-xs);
+    font-weight: 400;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ui-muted);
+    overflow-wrap: anywhere;
+  }
+
+  /* A banner sits in the flow rather than over it, so it takes the surface
+     and a line like any panel. The warn variant moves only the start edge,
+     since --ui-warning is measured as a mark, not as a text background. */
+  .ui-banner {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--ui-space-2) var(--ui-space-3);
+    box-sizing: border-box;
+    margin: 0;
+    padding: var(--ui-space-3);
+    font-size: var(--ui-text-sm);
+    color: var(--ui-text);
+    background: var(--ui-surface);
+    border: 1px solid var(--ui-border);
+    border-inline-start-width: var(--ui-space-1);
+    border-radius: var(--ui-radius);
+  }
+  .ui-banner-warn {
+    border-inline-start-color: var(--ui-warning);
+  }
+  .ui-banner-text {
+    flex: 1 1 12rem;
+    min-inline-size: 0;
+    overflow-wrap: anywhere;
+  }
+  .ui-banner > .ui-button { flex: none; }
+
+  /* A dot draws a state in the host's colour, which it reads from
+     --ui-dot-color on the dot or an ancestor. */
+  .ui-dot {
+    display: inline-block;
+    flex: none;
+    inline-size: var(--ui-space-2);
+    block-size: var(--ui-space-2);
+    vertical-align: middle;
+    background: var(--ui-dot-color, var(--ui-muted));
+    border-radius: var(--ui-radius-full);
+  }
+
+  /* display sits on [open] alone, because a display on .ui-dialog would show
+     a closed dialog. overflow stays hidden so the corners clip the scrolling
+     body, which is why a popover inside has to be position: fixed. */
+  .ui-dialog {
+    box-sizing: border-box;
+    inline-size: var(--ui-dialog-width);
+    max-inline-size: calc(100% - 2 * var(--ui-space-4));
+    max-block-size: var(--ui-dialog-max-height);
+    margin: auto;
+    padding: 0;
+    overflow: hidden;
+    color: var(--ui-text);
+    background: var(--ui-surface);
+    border: 1px solid var(--ui-dialog-border);
+    border-radius: var(--ui-radius-lg);
+    box-shadow: var(--ui-shadow);
+  }
+  .ui-dialog[open] {
+    display: flex;
+    flex-direction: column;
+    animation: ui-dialog-in var(--ui-duration-fast) ease-out;
+  }
+  /* Before Chrome 122 and Firefox 120 ::backdrop inherits no custom
+     properties, so the colour needs a fallback. A missing duration only drops
+     the fade. */
+  .ui-dialog::backdrop {
+    background: var(--ui-backdrop, rgb(0 0 0 / 50%));
+    animation: ui-dialog-backdrop-in var(--ui-duration-fast) ease-out;
+  }
+  /* No @starting-style, which is newer than the oldest browser a host
+     supports. Keyframes run when display leaves none, and leave no transform
+     behind that would capture a fixed popover. */
+  @keyframes ui-dialog-in {
+    from { opacity: 0; transform: translateY(var(--ui-space-2)); }
+  }
+  @keyframes ui-dialog-backdrop-in {
+    from { opacity: 0; }
+  }
+  /* showModal() leaves the page behind scrollable. Its own rule, because a
+     browser without :has or :modal drops the whole rule, and there the page
+     only scrolls behind the dialog. */
+  :root:has(.ui-dialog:modal) { overflow: hidden; }
+  .ui-dialog > form { display: contents; }
+  .ui-dialog-head {
+    display: flex;
+    flex: none;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--ui-space-3);
+    padding: var(--ui-space-2) var(--ui-space-4);
+    border-block-end: 1px solid var(--ui-dialog-border);
+  }
+  .ui-dialog-title {
+    min-inline-size: 0;
+    margin: 0;
+    font-size: var(--ui-text-md);
+    font-weight: var(--ui-label-weight);
+    overflow-wrap: anywhere;
+  }
+  /* Sits on a .ui-button-quiet, so it keeps that block's states. */
+  .ui-dialog-close {
+    flex: none;
+    inline-size: var(--ui-control-height);
+    padding: 0;
+  }
+  /* The x is an icon, not a × character: a font draws that glyph below the
+     middle of its line box, so it never centres in the button. */
+  :is(.ui-button-icon, .ui-dialog-close, .ui-search-clear) > svg {
+    flex: none;
+    inline-size: 1.25rem;
+    block-size: 1.25rem;
+  }
+  .ui-dialog-body {
+    flex: 1 1 auto;
+    min-block-size: 0;
+    padding: var(--ui-space-4);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+  }
+  .ui-dialog-actions {
+    display: flex;
+    flex: none;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    gap: var(--ui-space-2);
+    padding: var(--ui-space-3) var(--ui-space-4);
+    border-block-start: 1px solid var(--ui-dialog-border);
+  }
+
+  /* margin-block-start stays auto from .ui-dialog, which is what holds the
+     sheet to the bottom edge. The bottom padding keeps the last control
+     above a phone's gesture bar. */
+  .ui-dialog-sheet {
+    box-sizing: border-box;
+    inline-size: 100%;
+    max-inline-size: var(--ui-sheet-width);
+    margin-block-end: 0;
+    padding-block-end: env(safe-area-inset-bottom, 0);
+    border-block-end: 0;
+    border-start-start-radius: var(--ui-radius-xl);
+    border-start-end-radius: var(--ui-radius-xl);
+    border-end-start-radius: 0;
+    border-end-end-radius: 0;
+  }
+  .ui-dialog:not(.ui-dialog-sheet) > .ui-dialog-handle { display: none; }
+  .ui-dialog-sheet > .ui-dialog-handle {
+    flex: none;
+    inline-size: 2rem;
+    block-size: 0.25rem;
+    margin: var(--ui-space-2) auto 0;
+    border-radius: var(--ui-radius-full);
+    background: var(--ui-border);
+  }
+  .ui-dialog-sheet[open] { animation: ui-sheet-in var(--ui-duration-base) ease-out; }
+  @keyframes ui-sheet-in {
+    from { transform: translateY(100%); }
+  }
+
+  /* The bottom margin stays auto, which holds the panel to the top edge, and
+     its height follows the content, so with a phone keyboard down the page
+     shows below it. The top padding keeps the head below a notch. */
+  .ui-dialog-top {
+    box-sizing: border-box;
+    inline-size: 100%;
+    max-inline-size: none;
+    margin-block-start: 0;
+    padding-block-start: env(safe-area-inset-top, 0);
+    border-block-start: 0;
+    border-start-start-radius: 0;
+    border-start-end-radius: 0;
+    border-end-start-radius: var(--ui-radius-xl);
+    border-end-end-radius: var(--ui-radius-xl);
+  }
+
+  .ui-dialog-fullscreen {
+    box-sizing: border-box;
+    inline-size: 100%;
+    block-size: 100%;
+    max-inline-size: none;
+    max-block-size: none;
+    margin: 0;
+    padding: env(safe-area-inset-top, 0) env(safe-area-inset-right, 0)
+      env(safe-area-inset-bottom, 0) env(safe-area-inset-left, 0);
+    border: 0;
+    border-radius: 0;
+    box-shadow: none;
+  }
+  /* A display corner curves over roughly the last 40 to 50px of each edge,
+     and the actions row sits on the bottom edge, so its outer buttons move
+     inside the curve. The safe-area inset counts toward the gap below: it is
+     0 in a page without viewport-fit=cover, and Android reports no inset for
+     its corners at all. */
+  :is(.ui-dialog-sheet, .ui-dialog-fullscreen) .ui-dialog-actions {
+    padding-inline: var(--ui-corner-gap);
+    padding-block-end: max(var(--ui-space-3),
+      calc(var(--ui-corner-gap) - env(safe-area-inset-bottom, 0px)));
+  }
+
+  /* min-inline-size: 0 because the items' labels never wrap, and without it
+     a bar inside a grid or flex column widens that column to fit them all.
+     The end items sit in a rounded display's corners, so the bar moves them
+     in from the sides and up from the bottom edge by --ui-corner-gap, as a
+     sheet's actions row does. A safe-area inset counts toward the gap rather
+     than adding to it. */
+  .ui-bottom-bar {
+    display: var(--ui-bottom-bar-display);
+    box-sizing: border-box;
+    min-inline-size: 0;
+    margin: 0;
+    padding: 0 max(var(--ui-corner-gap), env(safe-area-inset-right, 0px))
+      max(var(--ui-corner-gap), env(safe-area-inset-bottom, 0px))
+      max(var(--ui-corner-gap), env(safe-area-inset-left, 0px));
+    background: var(--ui-surface);
+    border-block-start: 1px solid var(--ui-dialog-border);
+  }
+  /* Equal widths, so an item never moves when the active one changes. */
+  .ui-bottom-bar-item {
+    display: flex;
+    flex: 1 1 0;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: var(--ui-space-1);
+    box-sizing: border-box;
+    min-inline-size: 0;
+    min-block-size: var(--ui-bottom-bar-height);
+    margin: 0;
+    padding: 0 var(--ui-space-2);
+    font: inherit;
+    font-size: var(--ui-text-xs);
+    font-weight: var(--ui-label-weight);
+    color: var(--ui-muted);
+    text-decoration: none;
+    cursor: pointer;
+    background: transparent;
+    border: 0;
+  }
+  /* The pill behind the icon marks the current item by shape as well as
+     colour, so it reads for someone who cannot tell the two colours apart. */
+  .ui-bottom-bar-item > svg {
+    flex: none;
+    box-sizing: content-box;
+    inline-size: 1.5rem;
+    block-size: 1.5rem;
+    padding: var(--ui-space-1) var(--ui-space-3);
+    border-radius: var(--ui-radius-full);
+  }
+  .ui-bottom-bar-item > span {
+    max-inline-size: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  /* The label turns to full text colour rather than the accent, which a
+     host may not have made readable as small text on its surface. */
+  .ui-bottom-bar-item[aria-current="page"] { color: var(--ui-text); }
+  .ui-bottom-bar-item[aria-current="page"] > svg { color: var(--ui-accent); }
+  /* A var() inside color-mix() defers the check to computed time, where an
+     unknown function turns the declaration to unset rather than falling
+     back, so the tint needs a support test of its own. */
+  @supports (background: color-mix(in srgb, red 50%, transparent)) {
+    .ui-bottom-bar-item[aria-current="page"] > svg {
+      color: var(--ui-text);
+      background: color-mix(in srgb, var(--ui-accent) 24%, transparent);
+    }
+  }
+  .ui-bottom-bar-item:where(:not(:disabled, [aria-disabled="true"])):hover { color: var(--ui-text); }
+  .ui-bottom-bar-item:focus-visible {
+    outline: var(--ui-focus-width) solid var(--ui-focus-color);
+    outline-offset: calc(-1 * var(--ui-focus-width));
+  }
+  .ui-bottom-bar-item:is(:disabled, [aria-disabled="true"]) {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  /* The row's line is an inset shadow rather than a border, so the current
+     tab's own border is drawn over it, and the row scrolls rather than
+     clipping or wrapping a tab. The focus ring sits inside the tab, since the
+     scrolling row clips whatever sticks out of it. */
+  .ui-tabs {
+    display: flex;
+    box-sizing: border-box;
+    min-inline-size: 0;
+    margin: 0;
+    padding: 0;
+    overflow-x: auto;
+    box-shadow: inset 0 -1px 0 var(--ui-dialog-border);
+  }
+  .ui-tab {
+    display: inline-flex;
+    flex: none;
+    align-items: center;
+    justify-content: center;
+    gap: var(--ui-space-2);
+    box-sizing: border-box;
+    min-block-size: var(--ui-control-height);
+    margin: 0;
+    padding: var(--ui-space-1) var(--ui-space-3);
+    font: inherit;
+    font-size: var(--ui-text-sm);
+    font-weight: var(--ui-label-weight);
+    color: var(--ui-muted);
+    text-decoration: none;
+    white-space: nowrap;
+    cursor: pointer;
+    background: transparent;
+    border: 0;
+    border-block-end: 2px solid transparent;
+    border-radius: 0;
+  }
+  /* The line under the current tab marks it by shape as well as colour, and
+     its label takes full text colour rather than the accent, as the bottom
+     bar's does. */
+  .ui-tab:is([aria-current="page"], [aria-pressed="true"], [aria-selected="true"]) {
+    color: var(--ui-text);
+    border-block-end-color: var(--ui-accent);
+  }
+  .ui-tab:where(:not(:disabled, [aria-disabled="true"])):hover { color: var(--ui-text); }
+  .ui-tab:focus-visible {
+    outline: var(--ui-focus-width) solid var(--ui-focus-color);
+    outline-offset: calc(-1 * var(--ui-focus-width));
+  }
+  .ui-tab:is(:disabled, [aria-disabled="true"]) {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  .ui-bottom-bar-float {
+    margin: var(--ui-space-3);
+    margin-block-end: calc(var(--ui-space-3) + env(safe-area-inset-bottom, 0px));
+    padding: 0 var(--ui-space-1);
+    /* A ring rather than a border, so the bar is exactly
+       --ui-bottom-bar-height and a host's reserved space matches it. */
+    border: 0;
+    border-radius: var(--ui-radius-full);
+    box-shadow: 0 0 0 1px var(--ui-dialog-border), var(--ui-shadow);
+  }
+  @supports ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px)))
+    and (background: color-mix(in srgb, red 50%, transparent)) {
+    .ui-bottom-bar-float {
+      background: color-mix(in srgb, var(--ui-surface) 80%, transparent);
+      -webkit-backdrop-filter: blur(16px) saturate(1.5);
+      backdrop-filter: blur(16px) saturate(1.5);
+    }
+  }
+  @media (prefers-reduced-transparency: reduce) {
+    .ui-bottom-bar-float {
+      background: var(--ui-surface);
+      -webkit-backdrop-filter: none;
+      backdrop-filter: none;
+    }
+  }
+
+  /* The anchor is what an anchored menu is placed against, so the trigger and
+     the menu share it. */
+  .ui-menu-anchor {
+    position: relative;
+    display: inline-block;
+  }
+  .ui-menu,
+  .ui-popover {
+    position: absolute;
+    inset-block-start: calc(100% + var(--ui-space-1));
+    inset-inline-start: 0;
+    z-index: var(--ui-z-dropdown);
+    box-sizing: border-box;
+    min-inline-size: 10rem;
+    max-inline-size: min(20rem, 100vw - 2 * var(--ui-space-4));
+    margin: 0;
+    color: var(--ui-text);
+    background: var(--ui-surface);
+    border: 1px solid var(--ui-dialog-border);
+    border-radius: var(--ui-radius-lg);
+    box-shadow: var(--ui-shadow);
+    animation: ui-menu-in var(--ui-duration-fast) ease-out;
+  }
+  .ui-menu {
+    display: grid;
+    padding: var(--ui-space-1);
+  }
+  .ui-popover {
+    display: grid;
+    gap: var(--ui-space-3);
+    padding: var(--ui-space-3);
+  }
+  /* A fade only: a slide would need a transform, and the centred menu's
+     transform is what centres it. */
+  @keyframes ui-menu-in {
+    from { opacity: 0; }
+  }
+  .ui-menu-end { inset-inline: auto 0; }
+  .ui-menu-center {
+    inset-inline-start: 50%;
+    transform: translateX(-50%);
+  }
+  /* Fixed, so a dialog's scrolling body does not clip a menu mounted inside
+     it. The script that opens it sets both properties on the menu. */
+  .ui-menu-at {
+    position: fixed;
+    inset-block-start: var(--ui-menu-y, 0);
+    inset-inline: var(--ui-menu-x, 0) auto;
+    transform: none;
+  }
+
+  .ui-menu-item {
+    display: flex;
+    align-items: center;
+    gap: var(--ui-space-2);
+    box-sizing: border-box;
+    inline-size: 100%;
+    min-block-size: var(--ui-control-height);
+    margin: 0;
+    padding: var(--ui-space-1) var(--ui-space-3);
+    font: inherit;
+    font-size: var(--ui-text-sm);
+    color: var(--ui-text);
+    text-align: start;
+    text-decoration: none;
+    cursor: pointer;
+    background: transparent;
+    border: 0;
+    border-radius: var(--ui-radius-sm);
+  }
+  .ui-menu-item-danger { color: var(--ui-danger); }
+  /* The control surface, which tools/contrast.py already holds every text
+     colour to. A tint of the item's own colour would sit closer to it and
+     drop below 4.5:1 on a host whose colours are near the floor. */
+  .ui-menu-item:where(:not(:disabled, [aria-disabled="true"])):hover,
+  .ui-menu-item:focus-visible { background: var(--ui-control-surface); }
+  /* Inside, since the menu's own edge is the next thing out. */
+  .ui-menu-item:focus-visible {
+    outline: var(--ui-focus-width) solid var(--ui-focus-color);
+    outline-offset: calc(-1 * var(--ui-focus-width));
+  }
+  .ui-menu-item:is(:disabled, [aria-disabled="true"]) {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+  /* Checkable and option rows keep a column for the tick, so checked and
+     unchecked labels line up. */
+  .ui-menu-item:is([aria-checked], [role="option"])::before {
+    content: "";
+    flex: none;
+    box-sizing: border-box;
+    inline-size: 0.9em;
+    block-size: 0.5em;
+    border-inline-start: 2px solid transparent;
+    border-block-end: 2px solid transparent;
+    /* Lifted, since a rotated L sits below the middle of its box. */
+    transform: translateY(-0.1em) rotate(-45deg);
+  }
+  .ui-menu-item:is([aria-checked="true"], [aria-selected="true"])::before { border-color: currentColor; }
+  .ui-menu-sep {
+    margin: var(--ui-space-1) calc(-1 * var(--ui-space-1));
+    border: 0;
+    border-block-start: 1px solid var(--ui-dialog-border);
+  }
+  .ui-menu-head {
+    margin: 0;
+    padding: var(--ui-space-2) var(--ui-space-3) var(--ui-space-1);
+    font-size: var(--ui-text-xs);
+    color: var(--ui-muted);
+    overflow-wrap: anywhere;
+  }
+
+  /* Fixed to the viewport, so it needs no wrapper. The side insets and auto
+     margins centre it without a transform, which would otherwise be left
+     behind the animation. The larger of the bar's space and the corner gap
+     is what keeps it clear of both a bar and a bare rounded display. */
+  .ui-toast {
+    position: fixed;
+    inset-block-end: max(calc(var(--ui-bottom-bar-space) + var(--ui-space-3)),
+      var(--ui-corner-gap), env(safe-area-inset-bottom, 0px));
+    inset-inline: max(var(--ui-corner-gap), env(safe-area-inset-left, 0px))
+      max(var(--ui-corner-gap), env(safe-area-inset-right, 0px));
+    z-index: var(--ui-z-toast);
+    display: flex;
+    align-items: center;
+    gap: var(--ui-space-3);
+    box-sizing: border-box;
+    inline-size: fit-content;
+    max-inline-size: 100%;
+    margin: 0 auto;
+    padding: var(--ui-space-2) var(--ui-space-4);
+    font-size: var(--ui-text-sm);
+    color: var(--ui-text);
+    overflow-wrap: anywhere;
+    background: var(--ui-surface);
+    border: 1px solid var(--ui-dialog-border);
+    border-radius: var(--ui-radius-lg);
+    box-shadow: var(--ui-shadow);
+    animation: ui-toast-in var(--ui-duration-base) ease-out;
+  }
+  /* The toast breaks words anywhere so a long message fits, and a shrinking
+     action would break its label letter by letter. */
+  .ui-toast > .ui-button { flex: none; }
+  @keyframes ui-toast-in {
+    from { opacity: 0; transform: translateY(var(--ui-space-2)); }
+  }
+
+  /* Every display above beats the browser's own [hidden] rule, so a block
+     carrying the hidden attribute would still show. .ui-dialog[open] in the
+     list lifts this rule over all of them, whatever their order. */
+  :is(.ui-section, .ui-field, .ui-field-label, .ui-field-row, .ui-control-row,
+      .ui-toggle-row, .ui-toggle-text, .ui-choice-list, .ui-choice-segmented,
+      .ui-choice-pills, .ui-choice, .ui-disclosure, .ui-collapse, .ui-button,
+      .ui-chip, .ui-badge, .ui-dot, .ui-list-item, .ui-list-head, .ui-banner, .ui-empty,
+      .ui-dialog[open], .ui-dialog-head, .ui-dialog-actions, .ui-bottom-bar,
+      .ui-bottom-bar-item, .ui-tabs, .ui-tab, .ui-menu-anchor, .ui-menu, .ui-popover,
+      .ui-menu-item, .ui-toast)[hidden] {
+    display: none;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .ui-button { transition: none; }
+    .ui-dialog[open],
+    .ui-dialog::backdrop,
+    .ui-dialog-sheet[open],
+    .ui-menu,
+    .ui-popover,
+    .ui-toast { animation: none; }
+    .ui-toggle-row > input[type="checkbox"],
+    .ui-toggle-row > input[type="checkbox"]::after { transition: none; }
+    .ui-disclosure > summary::after,
+    .ui-collapse,
+    .ui-collapse-body { transition: none; }
+  }
+
+  /* Forced colours replace every background, which would leave the switch
+     thumb and the checked fill invisible, so these two controls opt out and
+     draw their states in system colours instead. */
+  @media (forced-colors: active) {
+    .ui-check,
+    .ui-toggle-row > input[type="checkbox"] {
+      forced-color-adjust: none;
+      background: Canvas;
+      border-color: CanvasText;
+    }
+    .ui-toggle-row > input[type="checkbox"]::after { background: CanvasText; }
+    .ui-check:checked,
+    .ui-toggle-row > input[type="checkbox"]:checked {
+      background: Highlight;
+      border-color: Highlight;
+    }
+    .ui-check:checked::after { border-color: HighlightText; }
+    .ui-toggle-row > input[type="checkbox"]:checked::after { background: HighlightText; }
+    .ui-check:disabled,
+    .ui-toggle-row > input[type="checkbox"]:disabled { border-color: GrayText; }
+    .ui-toggle-row > input[type="checkbox"]:disabled::after { background: GrayText; }
+    .ui-check:checked:disabled,
+    .ui-toggle-row > input[type="checkbox"]:checked:disabled { background: GrayText; }
+    .ui-toggle-row > input[type="checkbox"]:checked:disabled::after { background: Canvas; }
+    :is(.ui-check, .ui-toggle-row > input[type="checkbox"], .ui-disclosure > summary):focus-visible { outline-color: Highlight; }
+    /* Forced colours drop box-shadow, which is all a hover draws. */
+    .ui-button:where(:not(:disabled, [aria-disabled="true"])):hover { border-color: Highlight; }
+    .ui-chip:where(:not(:disabled, [aria-disabled="true"])):hover { border-color: Highlight; }
+    :is(a, button).ui-list-item:where(:not(:disabled, [aria-disabled="true"])):hover { border-color: Highlight; }
+    /* The tint is replaced, so a pressed row takes the selection colours. */
+    .ui-list-item[aria-pressed="true"] {
+      forced-color-adjust: none;
+      color: HighlightText;
+      background: Highlight;
+      border-color: Highlight;
+    }
+    .ui-list-item[aria-pressed="true"]:is(:disabled, [aria-disabled="true"]) {
+      color: Canvas;
+      background: GrayText;
+      border-color: GrayText;
+    }
+    /* The pressed fill is replaced too, so a pressed chip takes the system
+       selection colours. */
+    .ui-chip[aria-pressed="true"] {
+      forced-color-adjust: none;
+      color: HighlightText;
+      background: Highlight;
+      border-color: Highlight;
+    }
+    .ui-chip[aria-pressed="true"]:is(:disabled, [aria-disabled="true"]) {
+      color: Canvas;
+      background: GrayText;
+      border-color: GrayText;
+    }
+    /* A dot would lose its fill, so it keeps its shape in the text colour;
+       the text or label beside it carries the state. */
+    .ui-dot {
+      forced-color-adjust: none;
+      background: CanvasText;
+    }
+    .ui-bottom-bar-item[aria-current="page"],
+    .ui-bottom-bar-item[aria-current="page"] > svg { color: Highlight; }
+    /* Forced colours would draw the transparent line under every tab, so it
+       takes the page colour instead, and only the current one shows. */
+    .ui-tab { border-block-end-color: Canvas; }
+    .ui-tab:is([aria-current="page"], [aria-pressed="true"], [aria-selected="true"]) {
+      color: Highlight;
+      border-block-end-color: Highlight;
+    }
+    /* Forced colours replace the fill, so the item turns to the system
+       selection colours instead. */
+    .ui-menu-item:where(:not(:disabled, [aria-disabled="true"])):hover,
+    .ui-menu-item:focus-visible {
+      forced-color-adjust: none;
+      color: HighlightText;
+      background: Highlight;
+    }
+    /* The checked option's fill is replaced too, so it takes the system
+       selection colours. */
+    @supports selector(:has(*)) {
+      :is(.ui-choice-segmented, .ui-choice-pills) > .ui-choice:has(> input:checked) {
+        forced-color-adjust: none;
+        color: HighlightText;
+        background: Highlight;
+        border-color: Highlight;
+      }
+      :is(.ui-choice-segmented, .ui-choice-pills) > .ui-choice:has(> input:checked:disabled) {
+        color: Canvas;
+        background: GrayText;
+        border-color: GrayText;
+      }
+    }
+  }
+
+  /* A finger needs a bigger target than a mouse, and only a coarse pointer
+     gets it, so a desktop layout keeps its density. Selectors match the rules
+     they lift, so these win on source order. */
+  @media (pointer: coarse) {
+    .ui-button,
+    .ui-chip,
+    :is(a, button).ui-list-item,
+    .ui-field :is(input:where(:not([type="checkbox"], [type="radio"], [type="range"], [type="color"], [type="file"])), select),
+    .ui-control-row,
+    .ui-toggle-row,
+    .ui-choice,
+    .ui-tab,
+    .ui-disclosure > summary,
+    .ui-menu-item { min-block-size: var(--ui-touch-target); }
+    .ui-button-icon { inline-size: var(--ui-touch-target); }
+    .ui-dialog-close { inline-size: var(--ui-touch-target); }
+    .ui-search-clear { inline-size: var(--ui-touch-target); }
+    .ui-field .ui-search > input { padding-inline-end: var(--ui-touch-target); }
+  }
+}

@@ -32,6 +32,8 @@ Validate `data.json` before committing (CI runs the same check):
 node scripts/validate.mjs
 ```
 
+`ui.css` is a copy of the shared ui-foundation stylesheet, taken unedited from the release its first line names; it draws the dialogs, the tabs and the option rows. Replace the whole file from a newer tag rather than editing it, and keep the page's own CSS in `@layer app`. CI checks the copy and the page against it with that release's `tools/app_check.py`.
+
 ## Requirements
 
 A browser and any static file server. Node is only needed for `scripts/validate.mjs`.
