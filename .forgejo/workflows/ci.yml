@@ -79,7 +79,7 @@ jobs:
             --copy ui.css --repo "$GITHUB_SERVER_URL/bjorn/ui-foundation.git" \
             --entry index.html --scripts index.html \
             --contrast-host index.html \
-            --audit-files index.html --audit-max font-size=7 spacing=21 radius=3 transition=1 z-index=1 \
+            --audit-files index.html --audit-max font-size=6 spacing=21 radius=3 transition=1 z-index=1 \
             --one-off-files index.html --one-off-max inline-style=5 important=0 colour=9
 
   # Gates a PR's commits against the denylist before merge, while a hit is

@@ -271,7 +271,7 @@
       {
         "id": "strim", "name": "Strim", "color": "#00c389", "initials": "S", "lastChecked": "2026-04-19", "addonsLabel": "Tilpass pakke",
         "url": "https://www.strim.no/", "favicon": "logos/strim.png",
-        "note": "<div style=\"font-weight:600;color:var(--text);margin-bottom:0.3rem\">Inkludert i alle pakker:</div><ul><li>TV 2 Play Basis med reklame</li><li><details><summary>13 TV-kanaler</summary><span class=\"channel-list\">TV 2 Direkte, TV 2 Nyheter, TV 2 Zebra, TV 2 Livsstil, TVNorge, REX, FEM, VOX, TV3, TV3+, CNN, BBC News, TV 6</span></details></li></ul>",
+        "note": "<div style=\"font-weight:600;color:var(--text);margin-bottom:0.3rem\">Inkludert i alle pakker:</div><ul><li>TV 2 Play Basis med reklame</li><li><details class=\"ui-disclosure\"><summary>13 TV-kanaler</summary><span class=\"channel-list\">TV 2 Direkte, TV 2 Nyheter, TV 2 Zebra, TV 2 Livsstil, TVNorge, REX, FEM, VOX, TV3, TV3+, CNN, BBC News, TV 6</span></details></li></ul>",
         "tiers": [
           { "label": "Smart", "price": 399, "includes": ["tv2"], "info": "<ul><li>Én valgfri streamingtjeneste:<ul class=\"options\"><li>HBO Max Basis med reklame</li><li>Viaplay Film &amp; Serier med reklame</li></ul></li></ul>" },
           { "label": "Maks", "price": 499, "includes": ["tv2", "max", "viaplay", "skyshowtime", "nordiskfilm"], "includesTiers": {"skyshowtime": 1}, "info": "<ul><li>HBO Max Basis med reklame</li><li>Viaplay Film &amp; Serier med reklame</li><li>SkyShowtime uten reklame</li><li>Nordisk Film+</li></ul>" }

@@ -651,48 +651,21 @@
       font-weight: 600;
     }
 
-    .modal-tier-info details {
-      display: inline;
+    /* A ui-disclosure is a block, so the item it sits in lays the check mark
+       out beside it rather than above. */
+    .modal-tier-info > ul > li:has(> .ui-disclosure) {
+      display: flex;
+      align-items: baseline;
+      gap: var(--ui-space-1);
     }
 
-    .modal-tier-info details > summary {
-      cursor: pointer;
-      list-style: none;
-      display: inline-flex;
-      align-items: center;
-      gap: 0.3rem;
-      padding: 0.15rem 0.6rem;
-      border-radius: 999px;
-      background: var(--surface-raised);
-      border: 1px solid var(--border);
-      font-size: 0.82rem;
-      color: var(--text);
-      transition: border-color 0.15s;
-    }
-
-    .modal-tier-info details > summary:hover {
-      border-color: var(--accent);
-    }
-
-    .modal-tier-info details > summary::-webkit-details-marker {
-      display: none;
-    }
-
-    .modal-tier-info details > summary::after {
-      content: "▾";
-      color: var(--text-muted);
-      font-size: 0.75em;
-      display: inline-block;
-      transition: transform 0.2s;
-    }
-
-    .modal-tier-info details[open] > summary::after {
-      transform: rotate(180deg);
+    .modal-tier-info > ul > li:has(> .ui-disclosure) > .ui-disclosure {
+      flex: 1;
+      min-width: 0;
     }
 
     .channel-list {
       display: block;
-      margin-top: 0.35rem;
       color: var(--text-muted);
     }
 
