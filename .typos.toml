@@ -1,0 +1,17 @@
+# Norwegian words in the page copy and data.json that typos reads as English misspellings.
+[default.extend-identifiers]
+PNGs = "PNGs"
+
+[default.extend-words]
+alle = "alle"
+delt = "delt"
+februar = "februar"
+januar = "januar"
+juli = "juli"
+juni = "juni"
+maks = "maks"
+oktober = "oktober"
+pris = "pris"
+sist = "sist"
+som = "som"
+streames = "streames"
