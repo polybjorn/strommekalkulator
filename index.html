@@ -108,12 +108,6 @@
     }
 
     .category-title {
-      font-size: 0.8rem;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
-      color: var(--text-muted);
-      margin-bottom: 0.75rem;
       text-align: center;
     }
 
@@ -480,10 +474,6 @@
       padding-bottom: 0;
     }
 
-    .sport-filter-grid .points-cat-title {
-      margin-top: 0;
-    }
-
     .modal-header {
       display: flex;
       align-items: center;
@@ -764,20 +754,6 @@
       gap: 0.3rem;
     }
 
-    .addon-section-title {
-      font-size: 0.75rem;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      color: var(--text-muted);
-      margin-top: 1rem;
-      margin-bottom: 0.2rem;
-    }
-
-    .addon-section-title:first-of-type {
-      margin-top: 0.75rem;
-    }
-
     .addon-option {
       display: flex;
       align-items: center;
@@ -919,17 +895,6 @@
 
     .points-btn:hover {
       opacity: 0.9;
-    }
-
-    .points-cat-title {
-      font-size: 0.8rem;
-      font-weight: 700;
-      color: var(--text);
-      margin: 1.5rem 0 0.4rem;
-    }
-
-    .points-modal-cat:first-of-type .points-cat-title {
-      margin-top: 0;
     }
 
     .points-count {
@@ -1193,6 +1158,30 @@
         position: absolute;
       }
     }
+    }
+
+    /* Unlayered: the ui layer sits after app and gives .ui-list-head margin 0,
+       so a head's spacing only holds outside the app layer. */
+    .category-title {
+      margin-bottom: 0.75rem;
+    }
+
+    .addon-section-title {
+      margin-top: 1rem;
+      margin-bottom: 0.2rem;
+    }
+
+    .addon-section-title:first-of-type {
+      margin-top: 0.75rem;
+    }
+
+    .points-cat-title {
+      margin: 1.5rem 0 0.4rem;
+    }
+
+    .points-modal-cat:first-of-type .points-cat-title,
+    .sport-filter-grid .points-cat-title {
+      margin-top: 0;
     }
   </style>
   <link rel="stylesheet" href="ui.css">
@@ -1759,7 +1748,7 @@
         const catColCount = Math.min(colCount, cat.items.length);
         return `
         <section class="category">
-          ${cat.category ? `<div class="category-title">${cat.category}</div>` : ''}
+          ${cat.category ? `<div class="ui-list-head category-title">${cat.category}</div>` : ''}
           <div class="grid">
             ${Array.from({length: catColCount}, () => '<div class="grid-col"></div>').join('')}
           </div>
@@ -2143,11 +2132,11 @@
           ${CLOSE_BUTTON}
         </div>
         ${choiceAddons.length ? `
-          <div class="addon-section-title">Valgfri strømmetjeneste</div>
+          <div class="ui-list-head addon-section-title">Valgfri strømmetjeneste</div>
           <div class="addon-list">${choiceAddons.map(renderOption).join('')}</div>
         ` : ''}
         ${regularAddons.length ? `
-          ${choiceAddons.length ? `<div class="addon-section-title">Ekstra tillegg</div>` : ''}
+          ${choiceAddons.length ? `<div class="ui-list-head addon-section-title">Ekstra tillegg</div>` : ''}
           <div class="addon-list">${regularAddons.map(renderOption).join('')}</div>
         ` : ''}
       `, 'narrow');
@@ -2187,7 +2176,7 @@
         </div>
         ${cats.map(cat => `
           <div class="points-modal-cat">
-            <div class="points-cat-title">${cat}</div>
+            <div class="ui-list-head points-cat-title">${cat}</div>
             <div class="addon-list">
               ${s.pointsOptions.filter(p => p.cat === cat).map(p => {
                 const checked = picks.includes(p.id);
@@ -2260,7 +2249,7 @@
     function openSportFilterModal() {
       const renderGroup = g => `
         <div class="points-modal-cat">
-          <div class="points-cat-title">${g.label}</div>
+          <div class="ui-list-head points-cat-title">${g.label}</div>
           <div class="addon-list">
             ${g.sports.map(sp => `
               <label class="addon-option">
