@@ -1634,8 +1634,10 @@
           if (openTiers.has(id)) openTiers.delete(id);
           else openTiers.add(id);
           const list = toggle.parentElement.querySelector('.tier-list[data-id="' + id + '"]');
-          toggle.classList.toggle('open');
-          list.classList.toggle('open');
+          const open = openTiers.has(id);
+          toggle.classList.toggle('open', open);
+          list.classList.toggle('open', open);
+          toggle.setAttribute('aria-expanded', String(open));
         });
       });
 
