@@ -226,8 +226,10 @@
     }
 
     .card-icon {
-      width: 32px;
-      height: 32px;
+      /* In em so the box grows with its initials when text is enlarged:
+         32px at the 12px font-size below. */
+      width: calc(32em / 12);
+      height: calc(32em / 12);
       border-radius: 8px;
       display: flex;
       align-items: center;
@@ -504,8 +506,8 @@
     }
 
     .modal-header .card-icon {
-      width: 36px;
-      height: 36px;
+      width: 3em;
+      height: 3em;
     }
 
     .modal-header h2 {
