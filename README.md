@@ -34,6 +34,8 @@ node scripts/validate.mjs
 
 `ui.css` is a copy of the shared ui-foundation stylesheet, taken unedited from the release its first line names; it draws the dialogs, the tabs and the option rows. Replace the whole file from a newer tag rather than editing it, and keep the page's own CSS in `@layer app`. CI checks the copy and the page against it with that release's `tools/app_check.py`.
 
+When a change touches the served files, CI also runs site-audit over the page as Pages serves it: Lighthouse accessibility, best practices and SEO must stay at 100 on phone and desktop, alongside the layout, contrast and crawl checks.
+
 ## Requirements
 
 A browser and any static file server. Node is only needed for `scripts/validate.mjs`.

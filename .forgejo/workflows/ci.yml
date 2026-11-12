@@ -101,6 +101,70 @@ jobs:
             --audit-files index.html app.js --audit-max font-size=6 spacing=21 radius=3 transition=1 z-index=1 \
             --one-off-files index.html app.js --one-off-max inline-style=5 important=0 colour=8
 
+  # Holds the page at 100 on Lighthouse on phone and desktop, plus the crawl
+  # checks, through ci-actions' site-audit scripts at the release they pin.
+  # The site is assembled the way pages.yml does and served under the Pages
+  # path. It holds a playwright slot for a few minutes, so it runs only when a
+  # served file or this workflow changed.
+  site-audit:
+    runs-on: playwright
+    timeout-minutes: 20
+    steps:
+      - name: Fetch ci-actions
+        run: git clone -q --depth 1 --branch v1 "$GITHUB_SERVER_URL/bjorn/ci-actions.git" "${RUNNER_TEMP:-/tmp}/ci-actions"
+      - name: Checkout
+        env:
+          TOKEN: ${{ github.token }}
+          DEPTH: "0"
+        run: bash "${RUNNER_TEMP:-/tmp}/ci-actions/checkout/checkout.sh"
+      - name: Decide whether the served site changed
+        id: scope
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          BASE_REF: ${{ github.event.pull_request.base.ref }}
+          BEFORE: ${{ github.event.before }}
+        run: |
+          set -euo pipefail
+          case "$EVENT_NAME" in
+            pull_request) from="origin/$BASE_REF" range="origin/$BASE_REF...HEAD" ;;
+            push) from="$BEFORE" range="$BEFORE..HEAD" ;;
+            *) from="" range="" ;;
+          esac
+          if [ -z "$from" ] || ! git rev-parse -q --verify "$from^{commit}" >/dev/null; then
+            echo "no usable range for $EVENT_NAME, so the audit runs"
+            echo run=true >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          # Served files are what pages.yml copies; this workflow counts too.
+          changed=$(git diff --name-only "$range" \
+            | grep -E '^\.forgejo/workflows/ci\.yml$|^[^.]' \
+            | grep -vE '^(scripts/|package\.json$)|\.md$' || true)
+          if [ -n "$changed" ]; then
+            printf 'changed:\n%s\n' "$changed"
+            echo run=true >> "$GITHUB_OUTPUT"
+          else
+            echo "no served file changed in $range"
+            echo run=false >> "$GITHUB_OUTPUT"
+          fi
+      - name: Assemble the site as pages.yml does
+        if: steps.scope.outputs.run == 'true'
+        run: |
+          mkdir _site
+          git ls-files -z -- ':!:.*' ':!:scripts' ':!:*.md' ':!:package.json' | xargs -0 cp --parents -t _site
+      - name: Fetch site-audit
+        if: steps.scope.outputs.run == 'true'
+        run: bash "${RUNNER_TEMP:-/tmp}/ci-actions/site-audit/fetch.sh"
+      - name: Self-test the audit and the server
+        if: steps.scope.outputs.run == 'true'
+        run: bash "${RUNNER_TEMP:-/tmp}/ci-actions/site-audit/selftest.sh"
+      - name: Audit the built site
+        if: steps.scope.outputs.run == 'true'
+        env:
+          DIR: _site
+          BASE: /strommekalkulator/
+          ORIGIN: https://polybjorn.github.io
+        run: bash "${RUNNER_TEMP:-/tmp}/ci-actions/site-audit/run.sh"
+
   # Gates a PR's commits against the denylist before merge, while a hit is
   # still a force-push to the PR branch rather than a rewrite of main.
   commit-gate:
@@ -125,7 +189,7 @@ jobs:
 
   github-sync:
     if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
-    needs: [attribution, prose, validate, app-check]
+    needs: [attribution, prose, validate, app-check, site-audit]
     runs-on: docker
     timeout-minutes: 10
     steps:
