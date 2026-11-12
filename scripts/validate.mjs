@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// Validates data.json consistency against itself and against index.html's SPORT_GROUPS.
+// Validates data.json consistency against itself and against app.js's SPORT_GROUPS.
 // Exits 1 on any hard error, 0 with warnings allowed.
 // Usage: node scripts/validate.mjs
 import { existsSync, readFileSync } from 'node:fs';
@@ -8,17 +8,17 @@ import { dirname, join } from 'node:path';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 const data = JSON.parse(readFileSync(join(root, 'data.json'), 'utf8'));
-const html = readFileSync(join(root, 'index.html'), 'utf8');
+const app = readFileSync(join(root, 'app.js'), 'utf8');
 
 const errors = [];
 const warnings = [];
 const err = (msg) => errors.push(msg);
 const warn = (msg) => warnings.push(msg);
 
-// --- extract SPORT_GROUPS from index.html ---
-const spMatch = html.match(/const SPORT_GROUPS\s*=\s*(\[[\s\S]*?\n\s{4}\];)/);
+// --- extract SPORT_GROUPS from app.js ---
+const spMatch = app.match(/const SPORT_GROUPS\s*=\s*(\[[\s\S]*?\n\];)/);
 if (!spMatch) {
-  err('Could not locate SPORT_GROUPS in index.html');
+  err('Could not locate SPORT_GROUPS in app.js');
 }
 const sportIdRe = /id:\s*'([^']+)'/g;
 const validSports = new Set();

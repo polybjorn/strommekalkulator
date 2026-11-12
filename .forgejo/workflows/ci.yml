@@ -89,17 +89,17 @@ jobs:
           version=$(sed -n '1s/^\/\* ui\.css \([0-9.]*\):.*/\1/p' ui.css)
           git clone -q --depth 1 --branch "v$version" "$GITHUB_SERVER_URL/bjorn/ui-foundation.git" "${RUNNER_TEMP:-/tmp}/ui-foundation"
       # Lower a limit when a value goes; never raise one. The page's script is
-      # inline, so index.html is also the --scripts file. Off the scales on
+      # app.js, which also builds markup, so it is audited with index.html. Off the scales on
       # purpose: 8px on the tier boxes, since the dialog maps --ui-radius-lg
       # to the page's 12px.
       - name: Vendored copy, host, contrast, scales and one-offs
         run: |
           python3 "${RUNNER_TEMP:-/tmp}/ui-foundation/tools/app_check.py" \
             --copy ui.css --repo "$GITHUB_SERVER_URL/bjorn/ui-foundation.git" \
-            --entry index.html --scripts index.html \
+            --entry index.html --scripts app.js \
             --contrast-host index.html \
-            --audit-files index.html --audit-max font-size=6 spacing=21 radius=3 transition=1 z-index=1 \
-            --one-off-files index.html --one-off-max inline-style=5 important=0 colour=8
+            --audit-files index.html app.js --audit-max font-size=6 spacing=21 radius=3 transition=1 z-index=1 \
+            --one-off-files index.html app.js --one-off-max inline-style=5 important=0 colour=8
 
   # Gates a PR's commits against the denylist before merge, while a hit is
   # still a force-push to the PR branch rather than a rewrite of main.
